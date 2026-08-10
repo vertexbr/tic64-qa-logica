@@ -1,0 +1,5 @@
+# Dependências diretas do curso. As transitivas o pip resolve sozinho.
+# Versões travadas para que toda a turma rode o mesmo ambiente durante as 15 aulas.
+pytest==9.1.1
+requests==2.34.2
+pytest-playwright==0.8.0
