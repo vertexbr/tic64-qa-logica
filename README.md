@@ -68,6 +68,46 @@ Um teste de interface ponta a ponta. Ele faz login no SauceDemo, adiciona um pro
 
 O SauceDemo é uma aplicação pública de terceiros, feita para servir de alvo de treino. Isso traz um efeito colateral que é conteúdo do curso: teste que depende de site de terceiro quebra por motivo que não é seu, e a Aula 13 trata de como lidar com isso.
 
+### `aulas/aula01_classificar_defeito.py`
+
+A Aula 01 não escreve Python: a turma sai dela com o pseudocódigo no papel. Este arquivo é a tradução, em código, do algoritmo `classificar_defeito` ensinado em aula, com a regra de negócio e o pseudocódigo comentados no topo do arquivo antes da função.
+
+Regra: defeito que impede o uso do sistema é severidade CRÍTICA; se não impede o uso mas afeta uma funcionalidade, é ALTA; qualquer outra coisa é BAIXA.
+
+O arquivo também traz o "erro proposital" da aula: a mesma função com as duas condições invertidas, para mostrar que a ordem das condições muda o resultado sem gerar nenhum erro de execução.
+
+```bash
+python aulas/aula01_classificar_defeito.py
+```
+
+Saída:
+
+```
+Severidade: CRÍTICA
+Severidade com a ordem trocada: ALTA
+```
+
+### `aulas/aula01_validar_login.py`
+
+Tradução, em código, do algoritmo `validar_login` ditado pela turma na Aula 01, com a regra de negócio e o pseudocódigo comentados no topo do arquivo.
+
+Regra: o login é aprovado se o usuário está ativo E a senha está correta; ao errar a senha três vezes o usuário é bloqueado, e depois de bloqueado não entra nem com a senha certa.
+
+Executa os quatro casos do teste de mesa feito em aula.
+
+```bash
+python aulas/aula01_validar_login.py
+```
+
+Saída:
+
+```
+Caso 1 -> resultado: APROVADO | tentativas: 0
+Caso 2 -> resultado: NEGADO | tentativas: 3
+Caso 3 -> resultado: BLOQUEADO | tentativas: 3
+Caso 4 -> resultado: NEGADO | tentativas: 1
+```
+
 ### `aulas/aula02.py`
 
 Demonstração da Aula 02, o cenário de compra. Declara as variáveis do carrinho (valor do produto, quantidade, cliente ativo e o valor mínimo para frete grátis), calcula o total numa variável e imprime cinco linhas de evidência com f-string. No fim mostra o `type()` de três variáveis, para a turma ver `float`, `int` e `bool` saindo na tela.
@@ -109,10 +149,26 @@ Senhas iguais? True
 Tentativas: 0 | Token: None
 ```
 
-Os dois arquivos em sequência, num comando só:
+### `aulas/aula02_tipos_e_nomes.py`
+
+Demonstrações do primeiro ciclo da Aula 02: nomes de variável em snake_case, os cinco tipos do curso (`str`, `int`, `float`, `bool`, `None`) com o vocabulário do curso, a distinção entre `200` e `"200"`, o contraste de f-string com e sem o `f`, e o primeiro erro proposital (`"58" + 1`), capturado com `try/except` para o arquivo terminar sem travar.
 
 ```bash
-python aulas/aula02.py; python aulas/aula02_login.py
+python aulas/aula02_tipos_e_nomes.py
+```
+
+### `aulas/aula02_conversao_e_armadilhas.py`
+
+Demonstrações do segundo ciclo da Aula 02: a simulação de dado externo que vem como texto (o lugar do `input()` da calculadora que devolve `105`), a comparação `codigo == codigo_texto`, o erro `AttributeError` de `codigo.strip()` num número, a armadilha do `0.1 + 0.2`, a diferença entre o nome de uma variável e o seu conteúdo, e o erro da vírgula decimal (`599,90` virando tupla). Os erros propositais ficam em `try/except` para o arquivo rodar do início ao fim.
+
+```bash
+python aulas/aula02_conversao_e_armadilhas.py
+```
+
+Os quatro arquivos da Aula 02 em sequência, num comando só:
+
+```bash
+python aulas/aula02.py; python aulas/aula02_login.py; python aulas/aula02_tipos_e_nomes.py; python aulas/aula02_conversao_e_armadilhas.py
 ```
 
 No PowerShell do Windows use `;` como separador. O `&&` só funciona no PowerShell 7 ou no bash.
@@ -124,3 +180,5 @@ O repositório tem duas pastas com propósitos diferentes.
 Em `tests/` ficam as suítes que o pytest roda, um arquivo por aula, no padrão `tests/test_<assunto>_aula<NN>.py`, com o número da aula em dois dígitos. O nome de cada teste dentro do arquivo começa com `test_` e descreve o que está sendo verificado, em português, como em `test_compra_um_produto`.
 
 Em `aulas/` ficam as demonstrações feitas ao vivo, no padrão `aulas/aula<NN>.py`, com um sufixo quando a aula tem mais de um script, como `aulas/aula02_login.py`. Esses arquivos rodam pelo `python` e são script de estudo, não suíte de verificação. Deixá-los fora de `tests/` evita que o pytest tente coletá-los.
+
+A Aula 01 é a única exceção: nela a turma não digita Python, só pseudocódigo no papel. Os arquivos `aulas/aula01_classificar_defeito.py` e `aulas/aula01_validar_login.py` existem para dar à regra de negócio e ao algoritmo da aula uma forma executável, com o pseudocódigo comentado no topo do arquivo e o código correspondente embaixo.
