@@ -68,6 +68,59 @@ Um teste de interface ponta a ponta. Ele faz login no SauceDemo, adiciona um pro
 
 O SauceDemo é uma aplicação pública de terceiros, feita para servir de alvo de treino. Isso traz um efeito colateral que é conteúdo do curso: teste que depende de site de terceiro quebra por motivo que não é seu, e a Aula 13 trata de como lidar com isso.
 
+### `aulas/aula02.py`
+
+Demonstração da Aula 02, o cenário de compra. Declara as variáveis do carrinho (valor do produto, quantidade, cliente ativo e o valor mínimo para frete grátis), calcula o total numa variável e imprime cinco linhas de evidência com f-string. No fim mostra o `type()` de três variáveis, para a turma ver `float`, `int` e `bool` saindo na tela.
+
+```bash
+python aulas/aula02.py
+```
+
+Saída:
+
+```
+Produto: R$ 199.90
+Quantidade: 3
+Total da compra: R$ 599.70
+Cliente ativo? True
+Frete grátis a partir de R$ 250.00
+<class 'float'>
+<class 'int'>
+<class 'bool'>
+```
+
+### `aulas/aula02_login.py`
+
+Segunda demonstração da Aula 02, o caso de teste de login. Separa o dado informado do dado esperado em variáveis distintas, que é a ideia central do exercício, e guarda ainda o contador de tentativas e o token da sessão. A comparação usa `==`, o operador que compara valores, diferente do `=` que atribui.
+
+O `token = None` está ali de propósito: `None` é ausência de valor, não string vazia, e imprime literalmente `None`.
+
+```bash
+python aulas/aula02_login.py
+```
+
+Saída:
+
+```
+Usuário informado: Nadinha
+Usuário esperado: Nadinha
+Usuários iguais? True
+Senhas iguais? True
+Tentativas: 0 | Token: None
+```
+
+Os dois arquivos em sequência, num comando só:
+
+```bash
+python aulas/aula02.py; python aulas/aula02_login.py
+```
+
+No PowerShell do Windows use `;` como separador. O `&&` só funciona no PowerShell 7 ou no bash.
+
 ## Convenção de arquivos
 
-Um arquivo por aula, no padrão `tests/test_<assunto>_aula<NN>.py`, com o número da aula em dois dígitos. O nome de cada teste dentro do arquivo começa com `test_` e descreve o que está sendo verificado, em português, como em `test_compra_um_produto`.
+O repositório tem duas pastas com propósitos diferentes.
+
+Em `tests/` ficam as suítes que o pytest roda, um arquivo por aula, no padrão `tests/test_<assunto>_aula<NN>.py`, com o número da aula em dois dígitos. O nome de cada teste dentro do arquivo começa com `test_` e descreve o que está sendo verificado, em português, como em `test_compra_um_produto`.
+
+Em `aulas/` ficam as demonstrações feitas ao vivo, no padrão `aulas/aula<NN>.py`, com um sufixo quando a aula tem mais de um script, como `aulas/aula02_login.py`. Esses arquivos rodam pelo `python` e são script de estudo, não suíte de verificação. Deixá-los fora de `tests/` evita que o pytest tente coletá-los.
