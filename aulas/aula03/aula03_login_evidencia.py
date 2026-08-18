@@ -1,6 +1,6 @@
 # Aula 03 - evidência esperado x obtido no caso de teste de login da Aula 02
 #
-# A massa é a mesma do aulas/aula02_login.py. O que muda é a evidência: em vez
+# A massa é a mesma do aulas/aula02/aula02_login.py. O que muda é a evidência: em vez
 # de só mostrar os valores, cada linha agora compara o esperado com o obtido e
 # imprime o resultado da comparação. Quem julga a igualdade é o Python; quem
 # ainda lê o True no fim da linha é você.

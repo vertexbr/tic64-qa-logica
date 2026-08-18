@@ -14,4 +14,4 @@ def test_compra_um_produto(page: Page):
 
     expect(page.locator(".cart_item")).to_have_count(1)
 
-    page.screenshot(path="test-results/compra_um_produto.png")
+    # page.screenshot(path="test-results/compra_um_produto.png")
