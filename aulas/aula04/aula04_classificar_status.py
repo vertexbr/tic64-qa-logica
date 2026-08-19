@@ -50,3 +50,59 @@ for codigo in codigos_status:
     # Este print está alinhado com o if, e não dentro dele: por isso ele
     # roda em toda volta, e não só quando alguma condição é verdadeira.
     print(f"Status {codigo}: {categoria}")
+
+# --- EXPLICACAO LINHA A LINHA · gerado, nao edite aqui ---
+#
+# Fonte: curso-vertex/Aulas/Aula04-Uma-Massa-Varios-Cenarios/
+#        explicacao-linha-a-linha/slide-13.md
+# Para mudar o texto, edite o .md e rode
+# curso-vertex/scripts/embutir_explicacao_no_codigo.py de novo.
+#
+# A numeracao abaixo e a DESTE arquivo: a mesma da calha do PyCharm e a mesma
+# que aparece no slide 13 da apresentacao.
+#
+#      33  codigos_status = [200, 201, 404, 500, 302, 403]
+#          A massa, a mesma do slide 5.
+#
+#      37  assert len(codigos_status) == 6
+#          A massa é conferida antes de ser usada. Se a listagem chegar com um
+#          item a menos, o programa para aqui e não produz um relatório
+#          errado.
+#
+#      38  print("Massa conferida: 6 códigos para classificar")
+#          Só executa porque a linha 37 passou.
+#
+#      40  for codigo in codigos_status:
+#          Seis voltas, uma por item. A cada volta, codigo recebe um valor da
+#          lista, na ordem. Os dois-pontos no fim e o recuo embaixo são as
+#          mesmas regras do if da Aula 03.
+#
+#      41  if codigo >= 200 and codigo < 300:
+#          Primeiro degrau da escada, agora rodando dentro do laço. Recuado
+#          uma vez porque está dentro do for.
+#
+#      42  categoria = "Sucesso"
+#          Recuado duas vezes: dentro do for e dentro do if.
+#
+#      43  elif codigo >= 400 and codigo < 500:
+#          Segundo degrau. Só é avaliado se o primeiro deu falso.
+#
+#      44  categoria = "Erro do cliente"
+#          Pega o 404 e o 403.
+#
+#      45  elif codigo >= 500:
+#          Terceiro degrau. Pega o 500.
+#
+#      46  categoria = "Erro do servidor"
+#
+#      47  else:
+#          O fim da escada: o que sobrou cai aqui.
+#
+#      48  categoria = "Redirecionamento ou outro"
+#          Só o 302 chega neste ramo.
+#
+#      52  print(f"Status {codigo}: {categoria}")
+#          Recuado uma vez só, alinhado com o if. Por isso ele roda em toda
+#          volta, e não só quando alguma condição é verdadeira.
+#
+# --- fim da explicacao linha a linha ---

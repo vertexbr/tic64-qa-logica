@@ -62,3 +62,44 @@ print(f"Execução anterior a ela: {execucoes[-2]}")
 
 assert execucoes[-1] == "falhou", f"esperado falhou, obtido {execucoes[-1]}"
 print("Verificação passou: a última execução falhou")
+
+# --- EXPLICACAO LINHA A LINHA · gerado, nao edite aqui ---
+#
+# Fonte: curso-vertex/Aulas/Aula04-Uma-Massa-Varios-Cenarios/
+#        explicacao-linha-a-linha/slide-07.md
+# Para mudar o texto, edite o .md e rode
+# curso-vertex/scripts/embutir_explicacao_no_codigo.py de novo.
+#
+# A numeracao abaixo e a DESTE arquivo: a mesma da calha do PyCharm e a mesma
+# que aparece no slide 7 da apresentacao.
+#
+#      21  produtos = [...]
+#          Seis produtos, que é o resultado que a tela de listagem deveria
+#          trazer.
+#
+#      23  print(f"A listagem trouxe {len(produtos)} produtos")
+#          A informação crua, sem julgamento nenhum: alguém precisa saber que
+#          o esperado era seis para achar isso bom ou ruim.
+#
+#      25  Comentário
+#          Marca de onde vem a linha de baixo: ela é da Aula 03.
+#
+#      26  print(f"esperado: 6 | obtido: {len(produtos)} | confere?
+#          {len(produtos) == 6}")
+#          A evidência da Aula 03, inteira: esperado, obtido e a comparação
+#          respondida pelo Python. Ela informa e não decide.
+#
+#      28  Comentário
+#          Marca a virada.
+#
+#      29  assert len(produtos) == 6
+#          A mesma comparação da linha 26, len(produtos) == 6, tirada de
+#          dentro do print e entregue ao Python. True passa em silêncio; False
+#          para o programa na hora.
+#
+#      30  print("Verificação passou: ...")
+#          Só chega a ser executada porque a linha 29 passou. Numa execução
+#          real essa linha é opcional; ela existe aqui para a turma ver que o
+#          programa seguiu.
+#
+# --- fim da explicacao linha a linha ---

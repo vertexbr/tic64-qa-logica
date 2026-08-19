@@ -36,3 +36,50 @@ for resultado in resultados:
 
 assert aprovados == 2
 print("Verificação passou: 2 aprovados em 3 execuções")
+
+# --- EXPLICACAO LINHA A LINHA · gerado, nao edite aqui ---
+#
+# Fonte: curso-vertex/Aulas/Aula04-Uma-Massa-Varios-Cenarios/
+#        explicacao-linha-a-linha/slide-16.md
+# Para mudar o texto, edite o .md e rode
+# curso-vertex/scripts/embutir_explicacao_no_codigo.py de novo.
+#
+# A numeracao abaixo e a DESTE arquivo: a mesma da calha do PyCharm e a mesma
+# que aparece no slide 16 da apresentacao.
+#
+#      27  aprovados = 0
+#          Antes do laço. É a catraca zerada antes do primeiro passageiro. Se
+#          essa linha estivesse dentro do for, ela rodaria em toda volta e o
+#          contador voltaria a zero sempre.
+#
+#      28  print(f"Antes da catraca: aprovados = {aprovados}")
+#          Mostra o estado inicial. Existe para a turma ver o zero antes de
+#          qualquer volta.
+#
+#      30  resultados = ["passou", "falhou", "passou"]
+#          A massa: três execuções, duas delas aprovadas.
+#
+#      32  for resultado in resultados:
+#          Três voltas.
+#
+#      33  if resultado == "passou":
+#          A condição que decide se a catraca gira nesta volta.
+#
+#      34  aprovados = aprovados + 1
+#          A linha do dia. Leia da direita para a esquerda: pega o valor que
+#          está na caixinha, soma um, guarda de volta na mesma caixinha. O
+#          valor anterior é esquecido.
+#
+#      35  print(f"Passou pela catraca '{resultado}': aprovados =
+#          {aprovados}")
+#          Recuado uma vez, então roda em toda volta, inclusive na que não
+#          incrementou. É isso que deixa o teste de mesa visível na tela.
+#
+#      37  assert aprovados == 2
+#          Depois do laço, quando o número já está fechado. A ordem importa:
+#          prepara a massa, executa a lógica, valida no fim.
+#
+#      38  print("Verificação passou: 2 aprovados em 3 execuções")
+#          Só executa porque a linha 37 passou.
+#
+# --- fim da explicacao linha a linha ---
