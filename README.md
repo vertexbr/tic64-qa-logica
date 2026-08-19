@@ -583,7 +583,8 @@ Verificação passou: a contagem terminou em zero e o laço acabou
 A segunda demonstração guiada: os números que aparecem no relatório de execução. Dois contadores
 em vez de um, um percentual calculado a partir deles, e um acumulador de tipo diferente, que
 guarda o maior valor visto em vez de somar. O detector do mais lento começa valendo `tempos[0]`, e
-não zero, porque zero funciona por acidente enquanto todos os tempos forem positivos.
+não zero, porque zero só funciona se você souber de antemão que nenhum valor da lista é
+negativo, e essa suposição não sobrevive ao próximo detector.
 
 ```bash
 python aulas/aula04/aula04_resumo_execucao.py

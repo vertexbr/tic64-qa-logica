@@ -8,10 +8,13 @@
 #   2. Um percentual calculado a partir deles.
 #   3. Um acumulador que guarda o maior valor visto, em vez de somar.
 #
-# Por que mais_lento começa valendo tempos[0] e não zero: zero funciona
-# por acidente enquanto todos os tempos são positivos, e falha feio no dia
-# em que a lista tem valor negativo. Começar pelo primeiro item da própria
-# lista é o jeito honesto.
+# Por que mais_lento começa valendo tempos[0] e não zero: zero só funciona
+# se você souber de antemão que nenhum valor da lista é negativo. Aqui você
+# sabe, porque duração não é negativa, e é justamente por isso que o exemplo
+# engana: o hábito passa para o próximo detector, onde o dado pode ser saldo
+# ou variação, e aí o zero vence a comparação e o detector devolve um valor
+# que não está na lista. Começar pelo primeiro item não supõe nada sobre o
+# dado, e o campeão inicial é sempre um candidato real.
 #
 # Este é o formato dos números que aparecem no relatório de execução que
 # você lê no trabalho: total, aprovados, falhas, percentual e o mais lento.
