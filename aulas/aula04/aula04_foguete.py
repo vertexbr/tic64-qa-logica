@@ -3,9 +3,16 @@
 # A catraca sobe, o foguete desce. Mecanismo idêntico, sinal trocado:
 # contagem = contagem - 1 em vez de aprovados = aprovados + 1.
 #
-# Os dois juntos ensinam a lição mais importante do dia: a variável de
-# controle precisa mudar dentro do laço. Se ela não muda, ou o número
-# final está errado, ou o laço nunca acaba.
+# Os dois juntos ensinam a lição do dia: a variável que carrega o resultado
+# precisa mudar dentro do laço, senão o número final sai errado.
+#
+# E repare no que este laço NAO faz: ele acaba de qualquer jeito. Quem conta
+# as cinco voltas é o range, não a contagem. Apagando o decremento, ele roda
+# as cinco voltas do mesmo jeito e só entrega o número errado.
+#
+# O laço que não termina é outro caso, e ele mora no aula04_laco_infinito.py:
+# lá a variável está dentro da condição do while, e não mexer nela deixa a
+# condição verdadeira para sempre.
 
 contagem = 5
 
