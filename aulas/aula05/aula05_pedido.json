@@ -1,0 +1,22 @@
+{
+  "id": 3041,
+  "status": "pago",
+  "cliente": {
+    "nome": "Gaia Silva",
+    "email": "  GAIA@Teste.COM  ",
+    "telefone": null
+  },
+  "produtos": [
+    { "nome": "Api de teste", "preco": 1000, "quantidade": 1 },
+    { "nome": "TV SONY", "preco": 5000, "quantidade": 10 },
+    { "nome": "Mouse Gamer", "preco": 100, "quantidade": 50 },
+    { "nome": "Teclado mecânico", "preco": 350, "quantidade": 1 }
+  ],
+  "valores": {
+    "subtotal": 61350,
+    "frete": 0,
+    "total": 61350
+  },
+  "frete_gratis": true,
+  "cupom_aplicado": false
+}
