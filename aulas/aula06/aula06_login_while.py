@@ -50,11 +50,11 @@ print("As duas verificações passaram")
 
 # --- EXPLICACAO LINHA A LINHA · gerado, nao edite aqui ---
 #
-# Gerado a partir de explicacao-linha-a-linha/slide-20.md.
+# Gerado a partir de explicacao-linha-a-linha/slide-19.md.
 # Nao edite este bloco: a proxima geracao substitui ele inteiro.
 #
 # A numeracao abaixo e a DESTE arquivo: a mesma da calha do PyCharm e a mesma
-# que aparece no slide 20 da apresentacao.
+# que aparece no slide 19 da apresentacao.
 #
 #      15  senha_correta = "JL1234!"
 #          O esperado, e ele vem do requisito.

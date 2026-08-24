@@ -46,11 +46,11 @@ print("As seis verificações passaram")
 
 # --- EXPLICACAO LINHA A LINHA · gerado, nao edite aqui ---
 #
-# Gerado a partir de explicacao-linha-a-linha/slide-24.md.
+# Gerado a partir de explicacao-linha-a-linha/slide-22.md.
 # Nao edite este bloco: a proxima geracao substitui ele inteiro.
 #
 # A numeracao abaixo e a DESTE arquivo: a mesma da calha do PyCharm e a mesma
-# que aparece no slide 24 da apresentacao.
+# que aparece no slide 22 da apresentacao.
 #
 #      20  def email_valido(email):
 #          Nome que é pergunta, e devolve verdadeiro ou falso.

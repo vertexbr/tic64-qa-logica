@@ -43,11 +43,11 @@ print("As três verificações passaram")
 
 # --- EXPLICACAO LINHA A LINHA · gerado, nao edite aqui ---
 #
-# Gerado a partir de explicacao-linha-a-linha/slide-10.md.
+# Gerado a partir de explicacao-linha-a-linha/slide-09.md.
 # Nao edite este bloco: a proxima geracao substitui ele inteiro.
 #
 # A numeracao abaixo e a DESTE arquivo: a mesma da calha do PyCharm e a mesma
-# que aparece no slide 10 da apresentacao.
+# que aparece no slide 9 da apresentacao.
 #
 #      14  def registrar_evidencia(caso, resultado):
 #          Dois parâmetros, e o nome é verbo. Esta é a família comando: ela

@@ -46,11 +46,11 @@ print("As três verificações passaram")
 
 # --- EXPLICACAO LINHA A LINHA · gerado, nao edite aqui ---
 #
-# Gerado a partir de explicacao-linha-a-linha/slide-11.md.
+# Gerado a partir de explicacao-linha-a-linha/slide-10.md.
 # Nao edite este bloco: a proxima geracao substitui ele inteiro.
 #
 # A numeracao abaixo e a DESTE arquivo: a mesma da calha do PyCharm e a mesma
-# que aparece no slide 11 da apresentacao.
+# que aparece no slide 10 da apresentacao.
 #
 #      19  def validar_cadastro(nome, email):
 #          Dois parâmetros, e três caminhos de saída lá dentro.

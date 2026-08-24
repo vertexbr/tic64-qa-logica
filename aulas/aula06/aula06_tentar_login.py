@@ -33,11 +33,11 @@ print("As três verificações passaram")
 
 # --- EXPLICACAO LINHA A LINHA · gerado, nao edite aqui ---
 #
-# Gerado a partir de explicacao-linha-a-linha/slide-22.md.
+# Gerado a partir de explicacao-linha-a-linha/slide-20.md.
 # Nao edite este bloco: a proxima geracao substitui ele inteiro.
 #
 # A numeracao abaixo e a DESTE arquivo: a mesma da calha do PyCharm e a mesma
-# que aparece no slide 22 da apresentacao.
+# que aparece no slide 20 da apresentacao.
 #
 #      11  def tentar_login(senha_correta, tentativas):
 #          Os dois dados que estavam soltos na margem viraram parâmetros. Foi
@@ -51,16 +51,16 @@ print("As três verificações passaram")
 #
 #      13  while numero < len(tentativas):
 #          A condição perdeu metade. Não há mais and not logou, e a comparação
-#          com o slide 20 é o ponto todo deste slide.
+#          com o slide 19 é o ponto todo deste slide.
 #
 #      14  senha = tentativas[numero]
-#          Igual ao slide 20.
+#          Igual ao slide 19.
 #
 #      15  numero = numero + 1
 #          A catraca, no mesmo lugar e pelo mesmo motivo.
 #
 #      16  if senha == senha_correta:
-#          Igual ao slide 20.
+#          Igual ao slide 19.
 #
 #      17  return numero
 #          Aqui está o slide. O return sai do if, sai do while e sai da
@@ -93,7 +93,7 @@ print("As três verificações passaram")
 #
 #      30  assert tentar_login("JL1234!", ["errada1", "errada2", "errada3"])
 #          == 0
-#          O caminho do bloqueio, que no slide 20 exigia editar o arquivo.
+#          O caminho do bloqueio, que no slide 19 exigia editar o arquivo.
 #          Esta linha é o valor inteiro de ter embalado.
 #
 #      31  assert tentar_login("JL1234!", ["JL1234!"]) == 1

@@ -55,7 +55,7 @@ print("As três verificações passaram")
 #          O outro caminho. Repare que não há else: se o if fosse verdadeiro,
 #          o return de cima já teria encerrado a função. Escrever else aqui
 #          funciona e não está errado; não escrever é o que o retorno
-#          antecipado permite, e é assunto do slide 11.
+#          antecipado permite, e é assunto do slide 10.
 #
 #      17  Linha em branco
 #          Separa a definição do uso.
