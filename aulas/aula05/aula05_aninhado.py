@@ -44,10 +44,8 @@ print(f"O andar de fora: {usuario['endereco']}")
 
 # --- EXPLICACAO LINHA A LINHA · gerado, nao edite aqui ---
 #
-# Fonte: curso-vertex/Aulas/Aula05-Lendo-JSON-com-Olhar-de-QA/
-#        explicacao-linha-a-linha/slide-08.md
-# Para mudar o texto, edite o .md e rode
-# curso-vertex/scripts/embutir_explicacao_no_codigo.py de novo.
+# Gerado a partir de explicacao-linha-a-linha/slide-08.md.
+# Nao edite este bloco: a proxima geracao substitui ele inteiro.
 #
 # A numeracao abaixo e a DESTE arquivo: a mesma da calha do PyCharm e a mesma
 # que aparece no slide 8 da apresentacao.
@@ -65,7 +63,7 @@ print(f"O andar de fora: {usuario['endereco']}")
 #
 #      17  "email": "  GAIA@Teste.COM  ",
 #          Campo sujo de propósito, com espaço nas duas pontas e maiúscula no
-#          meio. Ele fica sujo aqui e é limpo no slide 18, e é a mesma pessoa
+#          meio. Ele fica sujo aqui e é limpo no slide 16, e é a mesma pessoa
 #          nos dois arquivos.
 #
 #      18  "situacao": "ativo",

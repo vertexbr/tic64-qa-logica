@@ -40,10 +40,8 @@ print("Verificações passaram: a alteração e a criação aconteceram")
 
 # --- EXPLICACAO LINHA A LINHA · gerado, nao edite aqui ---
 #
-# Fonte: curso-vertex/Aulas/Aula05-Lendo-JSON-com-Olhar-de-QA/
-#        explicacao-linha-a-linha/slide-05.md
-# Para mudar o texto, edite o .md e rode
-# curso-vertex/scripts/embutir_explicacao_no_codigo.py de novo.
+# Gerado a partir de explicacao-linha-a-linha/slide-05.md.
+# Nao edite este bloco: a proxima geracao substitui ele inteiro.
 #
 # A numeracao abaixo e a DESTE arquivo: a mesma da calha do PyCharm e a mesma
 # que aparece no slide 5 da apresentacao.

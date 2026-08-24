@@ -32,13 +32,12 @@ print("Verificações passaram: a suíte não está apontada para produção")
 
 # --- EXPLICACAO LINHA A LINHA · gerado, nao edite aqui ---
 #
-# Fonte: curso-vertex/Aulas/Aula05-Lendo-JSON-com-Olhar-de-QA/
-#        explicacao-linha-a-linha/slide-10.md
-# Para mudar o texto, edite o .md e rode
-# curso-vertex/scripts/embutir_explicacao_no_codigo.py de novo.
+# Gerado a partir de explicacao-linha-a-linha/aula05_mapa_ambientes.md.
+# Nao edite este bloco: a proxima geracao substitui ele inteiro.
 #
-# A numeracao abaixo e a DESTE arquivo: a mesma da calha do PyCharm e a mesma
-# que aparece no slide 10 da apresentacao.
+# A numeracao abaixo e a DESTE arquivo, a mesma da calha do PyCharm.
+# Este arquivo NAO tem slide no deck: ele ficou no repositorio quando o
+# slide dele foi cortado por tempo, e a explicacao vive aqui.
 #
 #      10  ambientes = {
 #          Abre o mapa. Um teste, três endereços.

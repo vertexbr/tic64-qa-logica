@@ -33,10 +33,8 @@ print("As três verificações passaram")
 
 # --- EXPLICACAO LINHA A LINHA · gerado, nao edite aqui ---
 #
-# Fonte: curso-vertex/Aulas/Aula05-Lendo-JSON-com-Olhar-de-QA/
-#        explicacao-linha-a-linha/slide-07.md
-# Para mudar o texto, edite o .md e rode
-# curso-vertex/scripts/embutir_explicacao_no_codigo.py de novo.
+# Gerado a partir de explicacao-linha-a-linha/slide-07.md.
+# Nao edite este bloco: a proxima geracao substitui ele inteiro.
 #
 # A numeracao abaixo e a DESTE arquivo: a mesma da calha do PyCharm e a mesma
 # que aparece no slide 7 da apresentacao.
@@ -79,7 +77,7 @@ print("As três verificações passaram")
 #          informado')}")
 #          Sai não informado. O segundo argumento é o valor de retorno quando
 #          a chave não existe, e é ele que vira o zero do contador no slide
-#          22.
+#          20.
 #
 #      21  Linha em branco
 #          Separa as três ferramentas do contraexemplo.

@@ -55,13 +55,11 @@ print("Verificações da forma curta passaram")
 
 # --- EXPLICACAO LINHA A LINHA · gerado, nao edite aqui ---
 #
-# Fonte: curso-vertex/Aulas/Aula05-Lendo-JSON-com-Olhar-de-QA/
-#        explicacao-linha-a-linha/slide-21.md
-# Para mudar o texto, edite o .md e rode
-# curso-vertex/scripts/embutir_explicacao_no_codigo.py de novo.
+# Gerado a partir de explicacao-linha-a-linha/slide-19.md.
+# Nao edite este bloco: a proxima geracao substitui ele inteiro.
 #
 # A numeracao abaixo e a DESTE arquivo: a mesma da calha do PyCharm e a mesma
-# que aparece no slide 21 da apresentacao.
+# que aparece no slide 19 da apresentacao.
 #
 #      21  resultados = ["passou", "falhou", "passou", "ignorado", "passou",
 #          "falhou"]
