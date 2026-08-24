@@ -9,6 +9,9 @@
 # passa a valer a partir de 199. Quantos lugares você edita? E se esquecer um,
 # o sistema fica com duas regras ao mesmo tempo e ninguém percebe.
 
+# A regra do frete grátis é a mesma de aulas/aula02/aula02.py, onde ela era um
+# valor_minimo_frete_gratis solto, e da atividade da Aula 04. Aqui ela está
+# escrita três vezes de propósito, para doer.
 subtotal_ana = 199.90 * 3
 if subtotal_ana >= 250:
     frete_ana = 0.0

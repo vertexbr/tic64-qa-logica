@@ -11,6 +11,10 @@
 # assim que se monta lógica grande a partir de peças pequenas, cada uma
 # testável sozinha.
 
+# O padrão de acumular é o de aulas/aula04/aula04_unicidade.py, onde uma lista
+# nascia vazia e crescia dentro do laço com append. O acréscimo é o tipo: aqui
+# o acumulador é TEXTO, começa em string vazia, e cresce com concatenação. E
+# a letra nova entra NA FRENTE, que é o que produz a inversão.
 def inverter(texto):
     invertido = ""
     for letra in texto:

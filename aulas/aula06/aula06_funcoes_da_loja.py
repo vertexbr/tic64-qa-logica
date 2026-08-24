@@ -14,6 +14,9 @@ def tem_frete_gratis(total):
     return total >= 250.00
 
 
+# Este if é o mesmo de aulas/aula03/aula03_defeitos.py, que por sua vez veio do
+# pseudocódigo de aulas/aula01/aula01_classificar_defeito.py. Nada mudou na
+# lógica: o acréscimo é o def e o return, que é o que torna ela chamável.
 def classificar_severidade(impede_producao, tem_workaround):
     if impede_producao and not tem_workaround:
         return "CRÍTICA"
@@ -22,6 +25,10 @@ def classificar_severidade(impede_producao, tem_workaround):
     return "MÉDIA"
 
 
+# As mesmas faixas de aulas/aula04/aula04_classificar_status.py, onde elas
+# viviam dentro de um for que percorria a lista de códigos. O acréscimo é que
+# aqui a decisão saiu do laço: a função decide UM código, e quem quiser
+# percorrer uma lista chama ela dentro do for. Peça pequena, testável sozinha.
 def classificar_status_code(codigo):
     if 200 <= codigo < 300:
         return "sucesso"
@@ -32,6 +39,9 @@ def classificar_status_code(codigo):
     return "outro"
 
 
+# O strip e o lower são os de aulas/aula05/aula05_email_sujo.py. O acréscimo é
+# o replace, que troca espaço por ponto, e o return montando o endereço. Lá a
+# normalização servia para comparar; aqui ela serve para gerar.
 def gerar_email_teste(nome):
     limpo = nome.strip().lower().replace(" ", ".")
     return f"{limpo}@qatest.com"

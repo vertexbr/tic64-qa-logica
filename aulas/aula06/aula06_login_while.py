@@ -23,6 +23,10 @@ while numero < len(tentativas) and not logou:
     # Esta é a catraca do ônibus da Aula 04 de volta, com trabalho novo: ela é
     # o que garante que a condição um dia vira falsa. Ela vem ANTES de qualquer
     # if, então roda em toda volta. Apague esta linha e o terminal enche.
+    # Esta linha é a catraca de aulas/aula04/aula04_catraca.py, igual letra por
+    # letra. O acréscimo é o trabalho que ela faz aqui: lá ela contava, e aqui
+    # ela é o que garante que a condição do while um dia vira falsa. Em
+    # aulas/aula04/aula04_catraca_sem_incremento.py está o que acontece sem ela.
     numero = numero + 1
     if senha == senha_correta:
         print(f"Login OK na tentativa {numero}")
@@ -55,7 +59,7 @@ print("As duas verificações passaram")
 #      15  senha_correta = "JL1234!"
 #          O esperado, e ele vem do requisito.
 #
-#      16  tentativas = ["errada1", "errada2", "JL1234!"]
+#      16  tentativas = ["errada1", "errada2", "JL1234!"]   # <- a massa
 #          A massa, e é só ela que muda para ver o outro caminho. Lista da
 #          Aula 04, com três itens escolhidos: duas falhas e um acerto no
 #          limite.
@@ -78,49 +82,49 @@ print("As duas verificações passaram")
 #          Pega a tentativa da vez pelo número da posição. É LISTA USA NÚMERO
 #          de volta, uma aula depois de o dicionário ter sido a estreia.
 #
-#      26  numero = numero + 1
+#      30  numero = numero + 1
 #          A linha mais importante do arquivo. É a catraca da Aula 04, com
 #          trabalho novo: ela é o que garante que a condição um dia vira
 #          falsa. Ela está antes de qualquer if, então roda em toda volta.
 #          Apague ela e o terminal enche.
 #
-#      27  if senha == senha_correta:
+#      31  if senha == senha_correta:
 #          Dois iguais comparam, um igual guarda.
 #
-#      28  print(f"Login OK na tentativa {numero}")
+#      32  print(f"Login OK na tentativa {numero}")
 #          O numero já foi incrementado, então ele diz a tentativa humana: a
 #          terceira, não a segunda.
 #
-#      29  logou = True
+#      33  logou = True
 #          Levanta a bandeira, e é ela que faz a segunda metade da condição
 #          virar falsa na próxima volta.
 #
-#      30  else:
+#      34  else:
 #          O caminho da falha.
 #
-#      31  print(f"Tentativa {numero} falhou")
+#      35  print(f"Tentativa {numero} falhou")
 #          Uma linha por tentativa gasta.
 #
-#      33  if not logou:
+#      37  if not logou:
 #          Fora do laço, e a indentação é o que diz isso. Se estivesse dentro,
 #          imprimiria "bloqueado" a cada falha.
 #
-#      34  print("Usuário bloqueado")
+#      38  print("Usuário bloqueado")
 #          Só aparece quando as três tentativas se esgotaram sem acerto.
 #
-#      36  print(f"Tentativas consumidas: {numero}")
+#      40  print(f"Tentativas consumidas: {numero}")
 #          Sai 3 nas duas massas, e é a evidência de que o laço parou por
 #          motivo diferente em cada uma.
 #
-#      43  assert logou == (senha_correta in tentativas)
+#      47  assert logou == (senha_correta in tentativas)
 #          Ver a seção abaixo. Este assert é o mais importante do arquivo, e
 #          não pela lógica dele.
 #
-#      44  assert numero == 3
+#      48  assert numero == 3
 #          Vale nas duas massas: com acerto na terceira, o contador chegou a
 #          3; sem acerto, o laço rodou as três voltas.
 #
-#      45  print("As duas verificações passaram")
+#      49  print("As duas verificações passaram")
 #          Fecha a execução, nas duas massas.
 #
 # --- fim da explicacao linha a linha ---
