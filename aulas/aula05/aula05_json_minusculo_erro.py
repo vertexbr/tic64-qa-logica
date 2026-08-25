@@ -11,7 +11,7 @@
 # Quando você copiar um JSON de resposta e colar no editor para virar massa de
 # teste, é exatamente aqui que vai quebrar.
 #
-# PARA VER O ERRO: descomente a linha 26 e rode. O Python para nela, e a
+# PARA VER O ERRO: descomente a linha 27 e rode. O Python para nela, e a
 # mensagem vem com a correção sugerida:
 #
 #   NameError: name 'true' is not defined. Did you mean: 'True'?
