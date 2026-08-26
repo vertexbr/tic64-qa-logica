@@ -36,3 +36,51 @@ print(f"Frete de 300: R$ {calcular_frete(300.00):.2f}")
 # ela só menciona o nome da função, e o Python não reclama disso.
 nunca_chamada
 print("O arquivo terminou, e a nunca_chamada não imprimiu nada")
+
+# --- EXPLICACAO LINHA A LINHA · gerado, nao edite aqui ---
+#
+# Gerado a partir de explicacao-linha-a-linha/slide-06.md.
+# Nao edite este bloco: a proxima geracao substitui ele inteiro.
+#
+# A numeracao abaixo e a DESTE arquivo: a mesma da calha do PyCharm e a mesma
+# que aparece no slide 6 da apresentacao.
+#
+#      16  def calcular_frete(subtotal):    # RECEBE
+#          Nada executa. O Python cria um nome, calcular_frete, e amarra nele
+#          o corpo indentado. O comentário da calha é para a turma ler, não
+#          para o Python.
+#
+#      17  if subtotal >= 250:          # CALCULA
+#          Não executa agora. Vai executar uma vez, quando a linha 32 chamar.
+#
+#      18  return 0.0               # DEVOLVE
+#          Idem.
+#
+#      19  return 20.0                  # DEVOLVE, pelo outro caminho
+#          Idem. Duas saídas, e é a mesma função do arquivo anterior.
+#
+#      22  def nunca_chamada(valor):
+#          Segundo nome criado, segundo corpo guardado. Nada executa nesta
+#          linha também.
+#
+#      23  print(f"Se isto aparecer, a função executou: {valor}")
+#          Esta linha nunca roda em nenhuma execução deste arquivo, e o texto
+#          dela existe para deixar isso óbvio se um dia rodar.
+#
+#      24  return valor * 2
+#          Nunca roda.
+#
+#      32  print(f"Frete de 300: R$ {calcular_frete(300.00):.2f}")
+#          A primeira coisa que executa no arquivo. A chamada acontece
+#          primeiro, com subtotal valendo 300.00; ela devolve 0.0; o :.2f
+#          formata para 0.00; o print escreve a linha.
+#
+#      37  nunca_chamada
+#          Executa e não faz nada visível. O Python avalia o nome, encontra o
+#          objeto função, descarta o resultado e segue. Sem os parênteses não
+#          há chamada.
+#
+#      38  print("O arquivo terminou, e a nunca_chamada não imprimiu nada")
+#          Segunda e última linha de saída.
+#
+# --- fim da explicacao linha a linha ---
