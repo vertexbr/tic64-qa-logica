@@ -20,3 +20,7 @@ playwright-report/
 # Segredos
 .env
 .env.*
+
+# Entregas das atividades. A solução do aluno fica local: publicar aqui seria
+# publicar o gabarito das suítes de autoverificação.
+entregas/
