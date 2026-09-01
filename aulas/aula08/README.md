@@ -53,7 +53,7 @@ O produto da Aula 08, e a primeira separação do curso: um arquivo com a regra,
 
 Duas funções-pergunta, e as duas devolvem booleano. `idade >= 18` já é `True` ou `False` antes de o `return` tocar nele, então quem escreve `if idade >= 18: return True` está fazendo a mesma coisa em três linhas. O `in` da segunda função é o da Aula 05, agora procurando texto numa lista de dois itens.
 
-O nome do arquivo não começa com `test_`, e isso é de propósito: se começasse, o pytest tentaria rodar as funções daqui como se fossem casos de teste.
+O nome do arquivo não começa com `test_`, e isso é de propósito: se começasse, o pytest examinaria o arquivo durante a descoberta. As funções ainda não seriam testes, porque seus nomes não começam com `test_`, mas produto e teste ficariam misturados.
 
 ```bash
 python aulas/aula08/aula08_regras.py
@@ -293,7 +293,7 @@ A suíte da loja, seis testes, e **exit code 1 de propósito**: cinco passam e o
 
 Os seis saíram da regra escrita, e não do código. É por isso que o `test_frete_gratis_no_limite` existe: a regra diz "frete grátis a partir de 250,00", então 250,00 exato tem que ter frete grátis. Os outros dois testes de frete, o de 300 e o de 100, passam com `>` e passariam com `>=`, e não distinguem as duas versões. O do limite distingue, e o cliente que gasta exatamente duzentos e cinquenta reais paga frete e liga para o suporte.
 
-Aplique a heurística do dia no vermelho que sai daqui: o erro é `AssertionError`, então o código rodou até o fim e o resultado veio diferente do esperado. Suspeite do produto. E o produto está errado mesmo: a correção é trocar `>` por `>=`, e é uma tecla.
+Aplique a heurística do dia no vermelho que sai daqui: o erro é `AssertionError`, então a comparação chegou ao fim e o resultado veio diferente. Agora volte à regra escrita. Ela inclui o 250, e o produto exclui. Neste caso, o produto está errado: a correção é trocar `>` por `>=`, e é uma tecla.
 
 O último teste fecha uma conta aberta na Aula 02. Um desconto de 10% sobre 99,90 dá 89,91 na sua cabeça e 89.91000000000001 em ponto flutuante. O `pytest.approx` compara com tolerância, e é a resposta que ficou prometida seis aulas atrás.
 
@@ -336,16 +336,16 @@ O outro lado do vermelho: quando o defeito é do seu teste. **Exit code 1 de pro
 
 A heurística, e ela é para guardar:
 
-| Tipo do erro no relatório | O que aconteceu | De quem suspeitar |
+| Tipo do erro no relatório | O que aconteceu | Por onde começar |
 |---|---|---|
-| `AssertionError` | o código rodou até o fim e o resultado veio diferente | do **produto** |
-| `TypeError`, `IndexError`, `KeyError`, `NameError`, `AttributeError` | o teste quebrou antes de chegar na validação | do **seu teste** |
+| `AssertionError` | a comparação chegou ao fim e obtido e esperado diferem | volte à **regra escrita** e compare produto, entrada e expectativa |
+| `TypeError`, `IndexError`, `KeyError`, `NameError`, `AttributeError` | a execução quebrou antes da validação | confira a **entrada do teste** e o contrato da função |
 
 Aqui a quantidade foi passada como `"3"`, entre aspas, e o teste nunca chegou no `assert`. Leia a mensagem com atenção, porque ela é mais interessante do que parece: a multiplicação não reclamou de nada, já que `100 * "3"` em Python repete o texto três vezes e devolve `"333"`. Quem estourou foi a subtração do desconto, e é por isso que a última linha diz `unsupported operand type(s) for -: 'str' and 'float'`.
 
 Repare também em qual arquivo o pytest aponta no fim: `aula08_loja.py`, que é o produto. O erro estourou lá dentro, mas quem entregou o dado errado foi o teste, e é o teste que se conserta. Abrir relatório de bug com isso é devolução na certa, e com razão.
 
-São os três tipos de erro da Aula 07 aplicados a relatório de teste: `AssertionError` é erro de lógica do produto, e os outros são erro de execução do seu próprio código.
+São os tipos de erro da Aula 07 dentro do relatório do pytest. O tipo mostra onde a execução parou. A regra escrita decide se o defeito está no produto ou no teste.
 
 ```bash
 pytest test_aula08_tipo_do_erro.py -s -v

@@ -10,9 +10,9 @@
 # cinquenta reais paga frete e liga para o suporte.
 #
 # Aplique a heurística do dia no vermelho que sai daqui: o erro é
-# AssertionError, então o código rodou até o fim e o resultado veio diferente do
-# esperado. Suspeite do produto. E o produto está errado mesmo; a correção é
-# trocar > por >=, e é uma tecla.
+# AssertionError, então a comparação chegou ao fim e o resultado veio diferente.
+# A regra inclui 250, e o produto exclui. Aqui o produto está errado; a correção
+# é trocar > por >=, e é uma tecla.
 #
 # O último teste fecha uma conta aberta na Aula 02: 99,90 com 10% de desconto dá
 # 89,91 na sua cabeça e 89,91000000000001 em ponto flutuante. O pytest.approx

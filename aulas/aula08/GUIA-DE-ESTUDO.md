@@ -13,7 +13,7 @@ cd aulas/aula08
 pytest test_aula08_regras.py -s -v
 ```
 
-**A heurística que vale a carreira:** `AssertionError` no relatório significa que o código rodou até o fim e o resultado veio diferente do esperado, então suspeite do **produto**. `TypeError`, `IndexError`, `KeyError`, `NameError` e `AttributeError` significam que o teste quebrou antes de chegar na validação, então suspeite do **seu teste**.
+**A heurística para investigar:** `AssertionError` significa que a comparação chegou ao fim e obtido e esperado diferem. Volte à regra escrita e compare produto, entrada e expectativa. `TypeError`, `IndexError`, `KeyError`, `NameError` e `AttributeError` mostram que a execução quebrou antes da validação. Confira primeiro a entrada do teste e o contrato da função.
 
 Os arquivos `.py` desta pasta terminam com um bloco de explicação linha a linha, marcado como gerado. A contagem de linhas abaixo inclui esse bloco, e ele não se edita à mão.
 
@@ -223,7 +223,7 @@ def test_total_com_quantidade_em_texto():
     assert calcular_total(100, "3") == 300
 ```
 
-Arquivo completo: `aulas/aula08/test_aula08_tipo_do_erro.py` (29 linhas). Para treinar, leia a última linha do relatório e repare que ela fala de `-` e não de `*`: a multiplicação não reclamou, porque `100 * "3"` em Python repete o texto e devolve `"333"`. Quem estourou foi a subtração. Depois troque `"3"` por `3` e rode: verde. E guarde a distinção, porque ela decide para quem você manda o relatório de bug: `AssertionError` acusa o produto, `TypeError` acusa você.
+Arquivo completo: `aulas/aula08/test_aula08_tipo_do_erro.py` (29 linhas). Para treinar, leia a última linha do relatório e repare que ela fala de `-` e não de `*`: a multiplicação não reclamou, porque `100 * "3"` em Python repete o texto e devolve `"333"`. Quem estourou foi a subtração. Depois troque `"3"` por `3` e rode: verde. O tipo do erro mostra onde a execução parou. A regra escrita mostra se o ajuste pertence ao produto ou ao teste.
 
 ## `aula08_pedidos.py`
 

@@ -1995,8 +1995,9 @@ Duas funções-pergunta, e as duas devolvem booleano. `idade >= 18` já é `True
 três linhas. O `in` da segunda função é o da Aula 05, agora procurando texto numa lista de dois
 itens.
 
-O nome do arquivo não começa com `test_`, e isso é de propósito: se começasse, o pytest tentaria
-rodar as funções daqui como se fossem casos de teste.
+O nome do arquivo não começa com `test_`, e isso é de propósito: se começasse, o pytest examinaria
+o arquivo durante a descoberta. As funções ainda não seriam testes, porque seus nomes não começam
+com `test_`, mas produto e teste ficariam misturados.
 
 ```bash
 python aulas/aula08/aula08_regras.py
@@ -2301,9 +2302,9 @@ Os outros dois testes de frete, o de 300 e o de 100, passam com `>` e passariam 
 distinguem as duas versões. O do limite distingue, e o cliente que gasta exatamente duzentos e
 cinquenta reais paga frete e liga para o suporte.
 
-Aplique a heurística do dia no vermelho que sai daqui: o erro é `AssertionError`, então o código
-rodou até o fim e o resultado veio diferente do esperado. Suspeite do produto. E o produto está
-errado mesmo: a correção é trocar `>` por `>=`, e é uma tecla.
+Aplique a heurística do dia no vermelho que sai daqui: o erro é `AssertionError`, então a comparação
+chegou ao fim e o resultado veio diferente. Agora volte à regra escrita. Ela inclui o 250, e o
+produto exclui. Neste caso, o produto está errado: a correção é trocar `>` por `>=`, e é uma tecla.
 
 O último teste fecha uma conta aberta na Aula 02. Um desconto de 10% sobre 99,90 dá 89,91 na sua
 cabeça e 89.91000000000001 em ponto flutuante. O `pytest.approx` compara com tolerância, e é a
@@ -2349,10 +2350,10 @@ vermelho não acusa o produto.
 
 A heurística, e ela é para guardar:
 
-| Tipo do erro no relatório | O que aconteceu | De quem suspeitar |
+| Tipo do erro no relatório | O que aconteceu | Por onde começar |
 |---|---|---|
-| `AssertionError` | o código rodou até o fim e o resultado veio diferente | do **produto** |
-| `TypeError`, `IndexError`, `KeyError`, `NameError`, `AttributeError` | o teste quebrou antes de chegar na validação | do **seu teste** |
+| `AssertionError` | a comparação chegou ao fim e obtido e esperado diferem | volte à **regra escrita** e compare produto, entrada e expectativa |
+| `TypeError`, `IndexError`, `KeyError`, `NameError`, `AttributeError` | a execução quebrou antes da validação | confira a **entrada do teste** e o contrato da função |
 
 Aqui a quantidade foi passada como `"3"`, entre aspas, e o teste nunca chegou no `assert`. Leia a
 mensagem com atenção, porque ela é mais interessante do que parece: a multiplicação não reclamou de
@@ -2364,8 +2365,8 @@ Repare também em qual arquivo o pytest aponta no fim: `aula08_loja.py`, que é 
 estourou lá dentro, mas quem entregou o dado errado foi o teste, e é o teste que se conserta. Abrir
 relatório de bug com isso é devolução na certa, e com razão.
 
-São os três tipos de erro da Aula 07 aplicados a relatório de teste: `AssertionError` é erro de
-lógica do produto, e os outros são erro de execução do seu próprio código.
+São os tipos de erro da Aula 07 dentro do relatório do pytest. O tipo mostra onde a execução parou.
+A regra escrita decide se o defeito está no produto ou no teste.
 
 ```bash
 pytest test_aula08_tipo_do_erro.py -s -v
