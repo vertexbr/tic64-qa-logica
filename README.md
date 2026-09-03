@@ -48,7 +48,9 @@ pytest -k compra                          # só os testes cujo nome casa com "co
 pytest -v                                 # uma linha por teste, com o nome de cada um
 ```
 
-Sem argumento, o pytest varre a pasta e roda todo arquivo `test_*.py` que encontrar. Passar o caminho é o jeito de limitar a um arquivo.
+Sem argumento o pytest roda só o que está em `tests/`, porque o `pytest.ini` do repositório fixa `testpaths = tests`. Passar o caminho é o jeito de limitar a um arquivo.
+
+Um detalhe que pega: `pytest .`, com o ponto, escapa dessa configuração. O ponto pede o repositório inteiro, então a varredura alcança também os arquivos de demonstração de `aulas/aula08/`, que existem para rodar um por vez e falham de propósito. A saída vira 26 testes com 7 vermelhos e parece repositório quebrado. Não é. Rode `pytest` sem o ponto.
 
 Nos testes de interface, o navegador roda escondido por padrão. Duas flags do `pytest-playwright` mudam isso:
 
