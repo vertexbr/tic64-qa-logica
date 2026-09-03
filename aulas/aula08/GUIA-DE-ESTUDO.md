@@ -13,7 +13,7 @@ cd aulas/aula08
 pytest test_aula08_regras.py -s -v
 ```
 
-**A heurística para investigar:** `AssertionError` significa que a comparação chegou ao fim e obtido e esperado diferem. Volte à regra escrita e compare produto, entrada e expectativa. `TypeError`, `IndexError`, `KeyError`, `NameError` e `AttributeError` mostram que a execução quebrou antes da validação. Confira primeiro a entrada do teste e o contrato da função.
+**O tipo mostra por onde começar:** `AssertionError` significa que a comparação chegou ao fim e obtido e esperado diferem. Volte à regra escrita e compare produto, entrada e expectativa. `TypeError`, `IndexError`, `KeyError`, `NameError` e `AttributeError` mostram que a execução quebrou antes da validação. Leia a linha indicada e confira os dados, o produto e o teste.
 
 Os arquivos `.py` desta pasta terminam com um bloco de explicação linha a linha, marcado como gerado. A contagem de linhas abaixo inclui esse bloco, e ele não se edita à mão.
 
@@ -242,7 +242,7 @@ Arquivo completo: `aulas/aula08/aula08_pedidos.py` (26 linhas). Para treinar, ch
 
 ## `test_aula08_recusa.py`
 
-As nove linhas da Aula 07 viram uma, com `pytest.raises`. O terceiro teste reprova de propósito.
+As nove linhas da Aula 07 viram três, com `pytest.raises`. O terceiro teste reprova de propósito.
 
 ```python
 import pytest

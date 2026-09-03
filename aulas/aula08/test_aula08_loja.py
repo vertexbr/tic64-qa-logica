@@ -9,7 +9,7 @@
 # > 250.00, que exclui o próprio 250. O cliente que gasta exatamente duzentos e
 # cinquenta reais paga frete e liga para o suporte.
 #
-# Aplique a heurística do dia no vermelho que sai daqui: o erro é
+# Aplique a leitura do tipo no vermelho que sai daqui: o erro é
 # AssertionError, então a comparação chegou ao fim e o resultado veio diferente.
 # A regra inclui 250, e o produto exclui. Aqui o produto está errado; a correção
 # é trocar > por >=, e é uma tecla.

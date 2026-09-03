@@ -293,7 +293,7 @@ A suíte da loja, seis testes, e **exit code 1 de propósito**: cinco passam e o
 
 Os seis saíram da regra escrita, e não do código. É por isso que o `test_frete_gratis_no_limite` existe: a regra diz "frete grátis a partir de 250,00", então 250,00 exato tem que ter frete grátis. Os outros dois testes de frete, o de 300 e o de 100, passam com `>` e passariam com `>=`, e não distinguem as duas versões. O do limite distingue, e o cliente que gasta exatamente duzentos e cinquenta reais paga frete e liga para o suporte.
 
-Aplique a heurística do dia no vermelho que sai daqui: o erro é `AssertionError`, então a comparação chegou ao fim e o resultado veio diferente. Agora volte à regra escrita. Ela inclui o 250, e o produto exclui. Neste caso, o produto está errado: a correção é trocar `>` por `>=`, e é uma tecla.
+Aplique a leitura do tipo no vermelho que sai daqui: o erro é `AssertionError`, então a comparação chegou ao fim e o resultado veio diferente. Agora volte à regra escrita. Ela inclui o 250, e o produto exclui. Neste caso, o produto está errado: a correção é trocar `>` por `>=`, e é uma tecla.
 
 O último teste fecha uma conta aberta na Aula 02. Um desconto de 10% sobre 99,90 dá 89,91 na sua cabeça e 89.91000000000001 em ponto flutuante. O `pytest.approx` compara com tolerância, e é a resposta que ficou prometida seis aulas atrás.
 
@@ -334,7 +334,7 @@ FAILED test_aula08_loja.py::test_frete_gratis_no_limite - assert False == True
 
 O outro lado do vermelho: quando o defeito é do seu teste. **Exit code 1 de propósito**, e este vermelho não acusa o produto.
 
-A heurística, e ela é para guardar:
+O tipo do erro mostra por onde começar:
 
 | Tipo do erro no relatório | O que aconteceu | Por onde começar |
 |---|---|---|
@@ -397,11 +397,11 @@ Saída: nenhuma, e exit code 0. Quem usa este arquivo é o `test_aula08_recusa.p
 
 ## `test_aula08_recusa.py`
 
-As nove linhas da Aula 07 viram uma. **Exit code 1 de propósito:** dois testes passam e o terceiro falha, e é o terceiro que ensina.
+As nove linhas da Aula 07 viram três. **Exit code 1 de propósito:** dois testes passam e o terceiro falha, e é o terceiro que ensina.
 
-Na aula passada, provar que `registrar_item` recusou quantidade zero custou nove linhas em `aulas/aula07/aula07_verifica_pedidos.py`: uma variável de estado começando em `False`, um `try`, a chamada, um `except` que muda a variável para `True`, a mensagem guardada, e dois `assert` no fim. Aquelas nove continuam certas e continuam valendo. Elas são o mecanismo, e quem entendeu o mecanismo lê a linha de hoje e sabe o que ela faz por baixo.
+Na aula passada, provar que `registrar_item` recusou quantidade zero custou nove linhas em `aulas/aula07/aula07_verifica_pedidos.py`: uma variável de estado começando em `False`, um `try`, a chamada, um `except` que muda a variável para `True`, a mensagem guardada, e dois `assert` no fim. Aquelas nove continuam certas. Elas mostram o mecanismo completo. Com o pytest, o `with`, a chamada e o `assert` da mensagem expressam a mesma verificação em três linhas.
 
-`with pytest.raises(ValueError)` diz: eu **espero** um `ValueError` aqui dentro. Se vier, o teste passa. Se não vier nada, o pytest reprova o teste sozinho, e essa é a metade que a turma escreveu na mão semana passada com o `assert levantou`.
+`with pytest.raises(ValueError)` diz: eu **espero** um `ValueError` aqui dentro. Se vier, o teste passa. Se não vier nada, o pytest reprova o teste sozinho. O pytest assume a variável de estado, o `try` e o `except` que a turma escreveu na semana passada.
 
 O segundo teste guarda o erro numa variável com `as erro` e confere a mensagem, porque não basta recusar: tem que recusar pelo motivo certo. A função tem dois `raise ValueError`, e sem conferir a mensagem um caso passaria com a recusa vindo do motivo errado. Repare que esse `assert` fica **fora** do `with`, e tem que ficar: dentro do bloco, a linha depois da que estourou nunca executa.
 

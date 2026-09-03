@@ -1,18 +1,18 @@
-# Aula 08 - as nove linhas da Aula 07 viram uma
+# Aula 08 - as nove linhas da Aula 07 viram três
 #
 # Na aula passada, provar que registrar_item recusou quantidade zero custou
 # nove linhas em aulas/aula07/aula07_verifica_pedidos.py: uma variável de
 # estado começando em False, um try, a chamada, um except que muda a variável
 # para True, a mensagem guardada, e dois assert no fim.
 #
-# Aquelas nove linhas continuam certas e continuam valendo. Elas são o
-# mecanismo, e é por isso que a Aula 07 escreveu elas primeiro: quem entendeu o
-# mecanismo lê a linha de hoje e sabe exatamente o que ela faz por baixo.
+# Aquelas nove linhas continuam certas. Elas mostram o mecanismo completo. Com
+# o pytest, o with, a chamada e o assert da mensagem expressam a mesma prova em
+# três linhas.
 #
 # O with pytest.raises(ValueError) diz: eu ESPERO um ValueError aqui dentro. Se
-# vier, o teste passa. Se não vier nada, o pytest reprova o teste sozinho, e
-# essa é a metade que a gente escreveu na mão semana passada com o
-# assert levantou.
+# vier, o teste passa. Se não vier nada, o pytest reprova o teste sozinho. O
+# pytest assume a variável de estado, o try e o except usados na semana
+# passada.
 #
 # O terceiro teste é a falha ao contrário da Aula 07, agora numa linha: a
 # quantidade é válida, a função devolve o texto e não levanta erro nenhum, então
@@ -89,7 +89,7 @@ def test_quantidade_valida_nao_deveria_ser_recusada():
 #          mensagem dele, e o in da Aula 05 procura o pedaço.
 #
 #      43  def test_quantidade_valida_nao_deveria_ser_recusada():
-#          A falha ao contrário, e é o slide 18 da Aula 07 em uma linha.
+#          A falha ao contrário, na forma curta do raises.
 #
 #      44  with pytest.raises(ValueError):
 #          O raises espera um erro.

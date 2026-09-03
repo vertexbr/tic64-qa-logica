@@ -3,7 +3,7 @@
 # É o código de aulas/aula07/aula07_pedidos.py, copiado sem alteração nenhuma.
 # O acréscimo desta aula não está no arquivo: está em quem verifica. Lá foram
 # nove linhas de try, except, variável de estado e dois assert para provar que
-# a função recusou. Aqui as nove viram uma, no test_aula08_recusa.py.
+# a função recusou. Aqui a mesma prova cabe em três, no test_aula08_recusa.py.
 #
 # Vale relembrar o reenquadramento da Aula 07, porque ele é o que faz a
 # verificação de hoje ter sentido: quando a regra de negócio manda rejeitar, o
