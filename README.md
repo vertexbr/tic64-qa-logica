@@ -50,7 +50,7 @@ pytest -v                                 # uma linha por teste, com o nome de c
 
 Sem argumento o pytest roda só o que está em `tests/`, porque o `pytest.ini` do repositório fixa `testpaths = tests`. Passar o caminho é o jeito de limitar a um arquivo.
 
-Um detalhe que pega: `pytest .`, com o ponto, escapa dessa configuração. O ponto pede o repositório inteiro, então a varredura alcança também os arquivos de demonstração de `aulas/aula08/`, que existem para rodar um por vez e falham de propósito. A saída vira 26 testes com 7 vermelhos e parece repositório quebrado. Não é. Rode `pytest` sem o ponto.
+Um detalhe que pega: `pytest .`, com o ponto, escapa dessa configuração. O ponto pede o repositório inteiro, então a varredura alcança também os arquivos de demonstração das pastas de aula, que existem para rodar um por vez. Vários deles falham de propósito, e dois da Aula 09 nem chegam a rodar: eles erram na coleta, também de propósito, e erro de coleta **interrompe a execução inteira**. O resultado é uma tela vermelha em que nenhum teste rodou, e parece repositório quebrado. Não é. Rode `pytest` sem o ponto.
 
 Nos testes de interface, o navegador roda escondido por padrão. Duas flags do `pytest-playwright` mudam isso:
 
@@ -1845,7 +1845,7 @@ reprovou na mesma execução, e por isso ele sai com exit code 0. O aviso é o a
 outra roupa: numa verificação de verdade a falha interrompe, e engolir asserção é o oposto de
 verificar.
 
-São nove linhas para provar uma recusa. Em `aulas/aula08/test_aula08_recusa.py` elas viram uma.
+São nove linhas para provar uma recusa. Em `aulas/aula08/test_aula08_recusa.py`, a mesma prova cabe em três.
 
 ```bash
 python aulas/aula07/aula07_verifica_pedidos.py
@@ -2304,7 +2304,7 @@ Os outros dois testes de frete, o de 300 e o de 100, passam com `>` e passariam 
 distinguem as duas versões. O do limite distingue, e o cliente que gasta exatamente duzentos e
 cinquenta reais paga frete e liga para o suporte.
 
-Aplique a heurística do dia no vermelho que sai daqui: o erro é `AssertionError`, então a comparação
+Aplique a leitura do tipo no vermelho que sai daqui: o erro é `AssertionError`, então a comparação
 chegou ao fim e o resultado veio diferente. Agora volte à regra escrita. Ela inclui o 250, e o
 produto exclui. Neste caso, o produto está errado: a correção é trocar `>` por `>=`, e é uma tecla.
 
@@ -2350,7 +2350,7 @@ FAILED test_aula08_loja.py::test_frete_gratis_no_limite - assert False == True
 O outro lado do vermelho: quando o defeito é do seu teste. **Exit code 1 de propósito**, e este
 vermelho não acusa o produto.
 
-A heurística, e ela é para guardar:
+O tipo do erro mostra por onde começar:
 
 | Tipo do erro no relatório | O que aconteceu | Por onde começar |
 |---|---|---|
@@ -2424,18 +2424,18 @@ Saída: nenhuma, e exit code 0. Quem usa este arquivo é o `test_aula08_recusa.p
 
 ### `aulas/aula08/test_aula08_recusa.py`
 
-As nove linhas da Aula 07 viram uma. **Exit code 1 de propósito:** dois testes passam e o terceiro
+As nove linhas da Aula 07 viram três. **Exit code 1 de propósito:** dois testes passam e o terceiro
 falha, e é o terceiro que ensina.
 
 Na aula passada, provar que `registrar_item` recusou quantidade zero custou nove linhas em
 `aulas/aula07/aula07_verifica_pedidos.py`: uma variável de estado começando em `False`, um `try`, a
 chamada, um `except` que muda a variável para `True`, a mensagem guardada, e dois `assert` no fim.
-Aquelas nove continuam certas e continuam valendo. Elas são o mecanismo, e quem entendeu o mecanismo
-lê a linha de hoje e sabe o que ela faz por baixo.
+Aquelas nove continuam certas. Elas mostram o mecanismo completo. Com o pytest, o `with`, a chamada
+e o `assert` da mensagem expressam a mesma verificação em três linhas.
 
 `with pytest.raises(ValueError)` diz: eu **espero** um `ValueError` aqui dentro. Se vier, o teste
-passa. Se não vier nada, o pytest reprova o teste sozinho, e essa é a metade que a turma escreveu na
-mão semana passada com o `assert levantou`.
+passa. Se não vier nada, o pytest reprova o teste sozinho. O pytest assume a variável de estado, o
+`try` e o `except` que a turma escreveu na semana passada.
 
 O segundo teste guarda o erro numa variável com `as erro` e confere a mensagem, porque não basta
 recusar: tem que recusar pelo motivo certo. A função tem dois `raise ValueError`, e sem conferir a
@@ -2513,6 +2513,350 @@ Traceback (most recent call last):
 AttributeError: module 'random' has no attribute 'choice' (consider renaming '...\aulas\aula08\colisao-de-nome\random.py' since it has the same name as the standard library module named 'random' and prevents importing that standard library module)
 ```
 
+### `aulas/aula09/aula09_regras.py`
+
+O produto da Aula 09. Quatro regras que já existem no curso, reunidas num arquivo só, mais uma
+quinta reduzida a duas condições. Esta aula não é sobre escrever regra nova: é sobre escolher
+**quais dados** usar para testar regra que já existe.
+
+Ele não imprime nada, e é de propósito: arquivo de produto não tem `print`. Quem chama são os
+testes ao lado.
+
+| Função | De onde vem | O que esta aula acrescenta |
+|---|---|---|
+| `validar_idade_minima` | `aulas/aula08/aula08_regras.py` | a escolha de quais idades testar: 17, 18 e 19 |
+| `tem_frete_gratis` | `aulas/aula06/aula06_funcoes_da_loja.py` | a massa 249.99, 250.00 e 300.00 |
+| `senha_valida` | `aulas/aula06/aula06_senha_valida.py` | uma massa que mistura valor-limite e partição |
+| `classificar_nota` | a escada da Aula 03, no retorno antecipado da Aula 06 | enxergar que ela tem três fronteiras, não uma |
+| `desconto_vip` | a regra de desconto da Aula 03, com duas condições | a tabela de decisão virando massa de quatro linhas |
+
+**O nome `desconto_vip` não é `calcular_desconto` de propósito.** Aquele nome foi fixado pela
+atividade da Aula 08, com quatro parâmetros. Reaproveitar o mesmo nome com outra assinatura uma
+aula depois faria você importar a função errada.
+
+```bash
+python aulas/aula09/aula09_regras.py
+```
+
+A `classificar_nota` é a regra da atividade desta aula, e ela tem **três** números escritos:
+
+```python
+def classificar_nota(nota):
+    if nota >= 90:
+        return "excelente"
+    if nota >= 80:
+        return "bom"
+    if nota >= 70:
+        return "suficiente"
+    return "insuficiente"
+```
+
+Três números escritos são três fronteiras, e cada fronteira pede o próprio par: 69 e 70, 79 e 80,
+89 e 90. Seis casos, e nenhum deles é 75, 85 ou 95, porque o meio da faixa é onde ninguém erra.
+
+### `aulas/aula09/aula09_regras_frete_quebrado.py`
+
+A mesma loja, com uma linha mudada: o `>= 250.00` virou `> 250.00`. É o mesmo defeito de
+`aulas/aula08/aula08_loja.py`, e ele volta porque nesta aula o que interessa não é achar o defeito:
+é ler o **nome** da linha que o denunciou.
+
+O arquivo roda, não levanta erro nenhum, e devolve `False` para exatamente 250,00. Quem escrever a
+massa a partir do código não vê nada; quem escrever a partir da regra escrita testa 250,00 e o
+vermelho aparece.
+
+### `aulas/aula09/test_aula09_idade_na_mao.py`
+
+Os cinco casos escritos um por um, cada um na própria função. Está correto e está completo, e é a
+forma que você escreveria sozinho depois da Aula 08.
+
+Os cinco não foram escolhidos no chute: 17, 18 e 19 são análise de valor-limite da fronteira 18, e
+0 e 120 são um representante de cada extremo das duas partições.
+
+```bash
+cd aulas/aula09
+pytest test_aula09_idade_na_mao.py -s -v
+```
+
+```
+collected 5 items
+
+test_aula09_idade_na_mao.py::test_idade_17_e_rejeitada PASSED
+test_aula09_idade_na_mao.py::test_idade_18_e_aceita PASSED
+test_aula09_idade_na_mao.py::test_idade_19_e_aceita PASSED
+test_aula09_idade_na_mao.py::test_idade_0_e_rejeitada PASSED
+test_aula09_idade_na_mao.py::test_idade_120_e_aceita PASSED
+
+============================== 5 passed in 0.04s ==============================
+```
+
+Agora olhe as cinco funções e responda o que muda de uma para a outra: **um número e um `True` ou
+`False`**. Todo o resto é copiado: o `def`, a chamada e o `assert` aparecem **cinco vezes cada
+um**, para carregar dez valores.
+
+E a conta piora com o tempo. Se a função mudar de nome, são cinco lugares para editar. Se
+aparecerem mais três casos, viram oito funções. E se você copiar uma função e esquecer de trocar o
+nome, a segunda substitui a primeira em silêncio: o contador cai de cinco para quatro e o relatório
+continua todo verde.
+
+### `aulas/aula09/test_aula09_idade_parametrizado.py`
+
+Os mesmos cinco casos, numa função só. São três coisas novas, e só três: a string que dá nome às
+colunas, a lista de tuplas que é a massa, e os parâmetros na assinatura da função.
+
+```python
+@pytest.mark.parametrize("idade,esperado", [
+    (17, False),    # vizinho de baixo da fronteira
+    (18, True),     # a fronteira, e ela entra
+    (19, True),     # vizinho de cima
+    (0, False),     # extremo inferior da partição de baixo
+    (120, True),    # extremo superior da partição de cima
+])
+def test_idade_minima(idade, esperado):
+    assert validar_idade_minima(idade) == esperado
+```
+
+O `import pytest` passa a ser obrigatório: o `assert` é do Python, mas o decorador é do pytest.
+
+```
+collected 5 items
+
+test_aula09_idade_parametrizado.py::test_idade_minima[17-False] PASSED
+test_aula09_idade_parametrizado.py::test_idade_minima[18-True] PASSED
+test_aula09_idade_parametrizado.py::test_idade_minima[19-True] PASSED
+test_aula09_idade_parametrizado.py::test_idade_minima[0-False] PASSED
+test_aula09_idade_parametrizado.py::test_idade_minima[120-True] PASSED
+
+============================== 5 passed in 0.05s ==============================
+```
+
+**Continuam sendo cinco testes, e não um.** O `collected 5 items` prova isso. O mesmo número de
+testes, e **o arquivo não ficou menor**. Medido em 03/09/2026, os dois têm onze linhas de código:
+com cinco casos o `parametrize` não encurta nada, e prometer economia de tamanho aqui seria mentira.
+
+| O que comparar | Na mão | Parametrizado |
+|---|--:|--:|
+| linhas de código | 11 | 11 |
+| vezes que o `def`, a chamada e o `assert` aparecem | 5 | 1 |
+| **custo do próximo caso** | **2 linhas** | **1 linha** |
+
+O ganho de tamanho só aparece quando a massa cresce, e aí ele vem sozinho. Com poucos casos o ganho
+é repetição e custo de manutenção.
+
+O que aparece entre colchetes é o pytest montando um nome com os valores da linha, e aqui funcionou
+porque os valores são autoexplicativos.
+
+Os comentários ao lado de cada linha são a única coisa no arquivo que explica **por que** 17 e não
+16. Massa sem o porquê envelhece: seis meses depois ninguém sabe se aquele valor foi escolhido ou
+digitado por acaso.
+
+### `aulas/aula09/test_aula09_tabela_decisao.py`
+
+A tabela de decisão de duas condições virando massa. Duas condições de sim ou não dão quatro
+combinações, e cada linha da tabela é um caso de teste.
+
+```python
+@pytest.mark.parametrize("cliente_vip,valor_compra,esperado", [
+    (True, 300.00, 20),
+    (True, 150.00, 10),
+    (False, 300.00, 0),
+    (False, 150.00, 0),
+], ids=[
+    "vip_acima_de_200",
+    "vip_abaixo_de_200",
+    "comum_acima_de_200",
+    "comum_abaixo_de_200",
+])
+def test_tabela_de_decisao_do_desconto(cliente_vip, valor_compra, esperado):
+    assert desconto_vip(valor_compra, cliente_vip) == esperado
+```
+
+**As quatro passam, e é isso que faz esta suíte valer alguma coisa.** Existe um jeito errado de
+fazer massa que parece certo: colocar dados válidos e inválidos na mesma lista e aceitar que o
+teste fique vermelho nas linhas inválidas, dizendo "essa linha era pra falhar mesmo". Isso destrói
+a suíte, porque no dia em que aparecer uma falha de verdade ninguém vai olhar.
+
+A regra deste curso: **o resultado esperado é o último parâmetro de cada linha, e assim todas as
+linhas passam.** Falha significa defeito, nunca "essa linha era pra falhar".
+
+Repare também que as duas últimas linhas têm o mesmo esperado. Isso é informação: a condição de
+valor só importa para quem é VIP.
+
+Cuidado com a ordem na linha do `assert`: na chamada vale a ordem da **função**, e não a da massa.
+A massa nomeia colunas; a função tem a assinatura dela.
+
+### `aulas/aula09/test_aula09_senha_e_frete.py`
+
+Dois `parametrize` no mesmo arquivo, sete testes no relatório. Um arquivo pode ter quantos precisar,
+e **cada um governa só a função imediatamente abaixo dele**.
+
+A massa da senha mistura as duas naturezas de propósito, e é isso que o `ids` deixa legível:
+
+| Linha | Técnica | O que ela cobre |
+|---|---|---|
+| `sete_caracteres_recusa` | valor-limite | o vizinho de baixo da fronteira de comprimento |
+| `oito_caracteres_aceita` | valor-limite | a fronteira, e ela entra |
+| `sem_maiuscula_recusa` | particionamento | o grupo "falta a maiúscula" |
+| `sem_numero_recusa` | particionamento | o grupo "falta o número" |
+
+Não existe uma quinta linha com senha longa e válida, e é de propósito: ela estaria na mesma
+partição da linha de oito caracteres.
+
+```
+collected 7 items
+
+test_aula09_senha_e_frete.py::test_politica_de_senha[sete_caracteres_recusa] PASSED
+test_aula09_senha_e_frete.py::test_politica_de_senha[oito_caracteres_aceita] PASSED
+test_aula09_senha_e_frete.py::test_politica_de_senha[sem_maiuscula_recusa] PASSED
+test_aula09_senha_e_frete.py::test_politica_de_senha[sem_numero_recusa] PASSED
+test_aula09_senha_e_frete.py::test_frete_gratis[um_centavo_abaixo] PASSED
+test_aula09_senha_e_frete.py::test_frete_gratis[exatamente_no_limite] PASSED
+test_aula09_senha_e_frete.py::test_frete_gratis[bem_acima] PASSED
+
+============================== 7 passed in 0.04s ==============================
+```
+
+### `aulas/aula09/test_aula09_frete_quebrado.py`
+
+A mesma massa do frete, apontada para o arquivo estragado. **Sai com exit code 1 de propósito**, e a
+falha é o conteúdo.
+
+```
+test_aula09_frete_quebrado.py::test_frete_gratis[um_centavo_abaixo] PASSED
+test_aula09_frete_quebrado.py::test_frete_gratis[exatamente_no_limite] FAILED
+test_aula09_frete_quebrado.py::test_frete_gratis[bem_acima] PASSED
+
+================================== FAILURES ===================================
+___________________ test_frete_gratis[exatamente_no_limite] ___________________
+
+total = 250.0, esperado = True
+
+>       assert tem_frete_gratis(total) == esperado
+E       assert False == True
+E        +  where False = tem_frete_gratis(250.0)
+
+========================= 1 failed, 2 passed in 0.09s =========================
+```
+
+"Exatamente no limite falhou." Você leu isso e já sabe qual é o defeito, sem abrir o código. Sem o
+`ids`, o relatório diria "caso 2 falhou".
+
+E repare na linha `total = 250.0, esperado = True`, no topo da falha: os nomes das colunas viraram
+nomes de variável no relatório. É a leitura das variáveis nomeadas da Aula 08, sem você escrever uma
+linha para isso.
+
+### `aulas/aula09/test_aula09_nome_errado.py`
+
+A primeira armadilha. Escreve-se `parametrize`, sem "e" no meio: `parameterize` não existe.
+
+**Este arquivo erra na coleta de propósito.**
+
+```
+E   Failed: Unknown 'parameterize' mark, did you mean 'parametrize'?
+!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+```
+
+O pytest atual recusa e sugere o nome certo na própria mensagem. Em versões mais antigas isso
+passava como aviso e o teste simplesmente sumia do relatório sem ninguém notar, que é bem pior.
+
+### `aulas/aula09/test_aula09_massa_desalinhada.py`
+
+A segunda armadilha. A quantidade de nomes tem que bater com o tamanho de cada tupla, e aqui a
+segunda linha tem três valores para dois nomes.
+
+**Este arquivo também erra na coleta de propósito.**
+
+```
+in "parametrize" the number of names (2):
+  ['idade', 'esperado']
+must be equal to the number of values (3):
+  (18, True, 'extra')
+```
+
+A mensagem é boa e diz os dois números, mas ela aparece na **coleta**: nada roda, nem os testes dos
+outros arquivos, e a tela parece que quebrou tudo. É uma vírgula.
+
+A conferência antes de rodar cabe numa frase: conte os nomes da string, conte os valores da primeira
+linha, e veja se são iguais. A mesma conta vale para o `ids`.
+
+### `aulas/aula09/test_aula09_do_csv.py` e `aula09_massa_frete.csv`
+
+O desafio extra: a massa sai de um arquivo em vez de estar no código, e passa a ser editável por
+quem não escreve Python.
+
+```
+id;total;esperado
+um_centavo_abaixo;249.99;False
+exatamente_no_limite;250.00;True
+bem_acima;300.00;True
+zero_reais;0.00;False
+```
+
+O separador é ponto e vírgula, e não vírgula, porque valor em real leva ponto ou vírgula decimal e a
+vírgula brigaria com a separação das colunas.
+
+**A armadilha, e ela é a única coisa realmente nova aqui:** tudo que sai de um arquivo de texto
+chega como texto. A string `"False"` não é o booleano `False`, e ela é **verdadeira** num `if`,
+porque toda string não vazia é verdadeira. Por isso as duas conversões existem, e por isso elas não
+são opcionais:
+
+```python
+massa.append((float(linha["total"]), linha["esperado"] == "True"))
+```
+
+### `aulas/aula09/aula09_massa_notas.csv`
+
+A planilha de casos que o time de negócio mandou, e **é ela que a atividade desta aula manda
+corrigir**. Quatro linhas, e nenhuma delas encosta em 70, 80 ou 90.
+
+```
+id;nota;esperado
+aluno_otimo;95;excelente
+aluno_bom;85;bom
+aluno_mediano;75;suficiente
+aluno_ruim;50;insuficiente
+```
+
+Ela testa só o meio de cada faixa. Se alguém trocar um `>=` por `>` na `classificar_nota`, as quatro
+continuam verdes.
+
+### `aulas/aula09/test_exemplo_playwright.py`
+
+O teste que prova que o Playwright ficou instalado. **Não é aula de Playwright**: ele existe para
+você ver `1 passed` na tela e saber que a sua máquina está pronta para a Aula 12.
+
+Antes de rodar, os dois comandos precisam ter terminado:
+
+```bash
+pip install pytest-playwright
+playwright install chromium
+```
+
+O primeiro instala a biblioteca. O segundo baixa o navegador que ela vai dirigir, e são cerca de
+190 MB. São coisas diferentes, e quem roda o teste no meio do segundo comando recebe uma mensagem
+dizendo que o executável do navegador não foi encontrado.
+
+```bash
+cd aulas/aula09
+pytest test_exemplo_playwright.py
+```
+
+```
+collected 1 item
+
+test_exemplo_playwright.py .                                             [100%]
+
+============================== 1 passed in 5.11s ==============================
+```
+
+O tempo varia de máquina para máquina e de rede para rede. O que importa é o `1 passed`.
+
+Se o comando `playwright` não for reconhecido, rode `python -m playwright install chromium`: essa
+forma usa o mesmo Python em que o pacote foi instalado, e resolve o caso de o ambiente virtual não
+estar ativo naquele terminal.
+
+De onde vem a `page`, o que é `get_by_role` e por que `expect` em vez de `assert` são assunto da
+Aula 12. Uma frase de função, porque a pergunta é inevitável: o Playwright dirige o navegador.
+
 ### `tests/test_setup.py`
 
 A verificação de ambiente do guia de setup, agora dentro do repositório. Da Aula 08 em diante o
@@ -2525,7 +2869,7 @@ que o Chromium abre pela automação, e precisa do navegador baixado com `playwr
 chromium`. Se aparecer `3 passed`, o ambiente está pronto para as 15 aulas.
 
 Os dois últimos dependem de coisa que não é o seu código: rede fora do ar e navegador não instalado
-deixam eles vermelhos sem que exista defeito nenhum. É o primeiro exemplo real da heurística desta
+deixam eles vermelhos sem que exista defeito nenhum. É o primeiro exemplo real da leitura desta
 aula, porque o vermelho aqui não acusa o produto, acusa o ambiente.
 
 ```bash
@@ -2589,6 +2933,46 @@ SKIPPED [1] tests\test_desconto_aula08.py:86: A entrega da Aula 08 ainda não es
 São seis funções de teste quase idênticas, uma por caso, escritas na mão de propósito. Repare no
 incômodo: muda o dado e o resultado esperado, e o resto é copiado. Guarde esse incômodo, porque a
 Aula 09 é sobre colapsar as seis numa só.
+
+### `tests/test_massa_aula09.py`
+
+A segunda suíte de autoverificação do curso, e ela julga uma coisa diferente da primeira. A da Aula
+08 julgava o seu **código**; esta julga a sua **massa de teste**, que é a competência que a Aula 09
+ensina. **Prazo da atividade: 15/09/2026, às 23h59.**
+
+Como usar, em quatro passos:
+
+1. Abra `aulas/aula09/aula09_massa_notas.csv`. É a planilha de casos que o time de negócio mandou,
+   com quatro linhas, e ela testa só o meio de cada faixa.
+2. Escreva a **sua** massa num arquivo chamado exatamente `massa_aula09.csv`, com as mesmas três
+   colunas separadas por ponto e vírgula: `id;nota;esperado`. Uma linha por caso.
+3. Salve o arquivo em `entregas/`, na raiz do repositório. Se a pasta não existir, crie.
+4. Rode, da raiz do repositório:
+
+```bash
+pytest tests/test_massa_aula09.py -v
+```
+
+O que aparece verde é a **sua** massa rodando de verdade contra a regra, uma linha por vez, com o
+**seu** nome em cada uma. É o mesmo relatório que a aula mostrou, porque a suíte alimenta um
+`parametrize` com a sua entrega.
+
+Ela cobra quatro coisas, e cada uma é um ponto da aula:
+
+1. As **três fronteiras** cobertas, cada uma com o próprio par: 69 e 70, 79 e 80, 89 e 90.
+2. O **esperado de cada linha** batendo com a regra. É esta que recusa a linha escrita para falhar,
+   e a mensagem dela diz isso com todas as letras.
+3. A massa **enxuta**, entre 6 e 10 linhas. Notas na mesma faixa se comportam igual.
+4. Um `id` **legível e único** por linha. Nome de caso é diagnóstico.
+
+Enquanto a entrega não estiver no lugar, a suíte inteira pula e a mensagem diz o que falta:
+
+```
+=========================== short test summary info ===========================
+SKIPPED [1] tests	est_massa_aula09.py:83: A entrega da Aula 09 ainda não está no lugar. Crie o arquivo 'entregas/massa_aula09.csv' na raiz do repositório, com as colunas id;nota;esperado separadas por ponto e vírgula, uma linha por caso de teste. Use 'aulas/aula09/aula09_massa_notas.csv' como modelo de formato. Depois rode de novo.
+```
+
+O pulo não é reprovação: é a suíte avisando que não achou a sua entrega.
 
 ### `pytest.ini`
 
@@ -2668,15 +3052,22 @@ aulas/
 │              aula07_pedidos.py, aula07_usa_pedidos.py, aula07_verifica_pedidos.py,
 │              aula07_relatorio_bugado.py, aula07_relatorio_corrigido.py,
 │              aula07_defeitos_pos_aula.py
-└── aula08/    aula08_regras.py, test_aula08_regras.py, test_aula08_escada.py,
+├── aula08/    aula08_regras.py, test_aula08_regras.py, test_aula08_escada.py,
                test_aula08_atomico.py, aula08_regras_quebradas.py, test_aula08_regressao.py,
                aula08_desconto.py, test_aula08_desconto.py, aula08_loja.py,
                test_aula08_loja.py, test_aula08_tipo_do_erro.py, aula08_pedidos.py,
                test_aula08_recusa.py, colisao-de-nome/random.py
+└── aula09/    aula09_regras.py, aula09_regras_frete_quebrado.py,
+               test_aula09_idade_na_mao.py, test_aula09_idade_parametrizado.py,
+               test_aula09_tabela_decisao.py, test_aula09_senha_e_frete.py,
+               test_aula09_frete_quebrado.py, test_aula09_nome_errado.py,
+               test_aula09_massa_desalinhada.py, test_aula09_do_csv.py,
+               aula09_massa_frete.csv, aula09_massa_notas.csv,
+               test_exemplo_playwright.py
 ```
 
 O nome do arquivo repete o número da aula de propósito: os comandos do curso são copiados e colados no terminal e no chat, e `python aulas/aula03/aula03_desconto.py` diz de qual aula é o arquivo mesmo fora do contexto da pasta. O `quadro_erro4.py` é a exceção do padrão, porque é o scratch do quadro de erros, não uma demonstração numerada da aula.
 
-Em `aulas/aula08/` duas coisas fogem do padrão, e as duas são de propósito. Os arquivos que começam com `test_` precisam desse prefixo, porque é ele que o pytest exige para encontrar um teste. E o `colisao-de-nome/random.py` mora numa subpasta só dele, porque o nome colide com o de uma biblioteca do Python e contaminaria a pasta inteira se ficasse ao lado dos outros.
+Em `aulas/aula08/` e `aulas/aula09/` os arquivos que começam com `test_` fogem do padrão do nome, e é de propósito: é esse prefixo que o pytest exige para encontrar um teste. Na Aula 08 há mais uma exceção. O `colisao-de-nome/random.py` mora numa subpasta só dele, porque o nome colide com o de uma biblioteca do Python e contaminaria a pasta inteira se ficasse ao lado dos outros.
 
 A Aula 01 é exceção por outro motivo: nela a turma não digita Python, só pseudocódigo no papel. Os arquivos `aulas/aula01/aula01_classificar_defeito.py` e `aulas/aula01/aula01_validar_login.py` existem para dar à regra de negócio e ao algoritmo da aula uma forma executável, com o pseudocódigo comentado no topo do arquivo e o código correspondente embaixo.

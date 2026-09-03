@@ -1,0 +1,5 @@
+id;total;esperado
+um_centavo_abaixo;249.99;False
+exatamente_no_limite;250.00;True
+bem_acima;300.00;True
+zero_reais;0.00;False
