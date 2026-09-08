@@ -3134,8 +3134,8 @@ O pulo não é reprovação: é a suíte avisando que não achou a sua entrega.
 
 A terceira suíte de autoverificação do curso, e ela julga uma coisa diferente das duas
 anteriores. A da Aula 08 julgava o seu **código**; a da Aula 09 julgava a sua **massa**; esta
-roda os **seus testes** de verdade contra a API real. **Prazo da atividade: véspera da Aula 11,
-14/09/2026, às 23h59.**
+roda os **seus testes** de verdade contra a API real. **Prazo da atividade: 15/09/2026, às
+23h59**, o mesmo da Aula 09: as duas aulas da semana entregam junto.
 
 Como usar, em três passos:
 
@@ -3152,13 +3152,18 @@ pytest tests/test_consulta_aula10.py -v
 
 Diferente das duas suítes anteriores, esta não compara a sua entrega contra um gabarito fixo,
 porque não existe um: o produto desta atividade é o próprio teste que você escreveu. A suíte
-carrega o seu arquivo, roda cada função que começa com `test_` de verdade contra o ServeRest, e
-reporta quantas passaram.
+entrega o seu arquivo ao pytest, num processo separado, com o mesmo comando que você usaria na
+mão, e lê o relatório dele.
 
 Ela cobra duas coisas:
 
-1. **Pelo menos três funções** começando com `test_`.
-2. **Todas passando** contra a API real, no momento em que você rodar.
+1. **Pelo menos três casos de teste** coletados. Quem escrever um `@pytest.mark.parametrize` da
+   Aula 9 conta cada linha da massa como um caso, porque é assim que o pytest conta.
+2. **Todos passando** contra a API real, no momento em que você rodar.
+
+Rodar o seu arquivo pelo pytest, e não chamar as suas funções na mão, é o que faz `parametrize`,
+fixture e classe de teste valerem aqui igual valem no terminal. Nenhuma forma que o curso ensinou
+é reprovada por causa do formato.
 
 Enquanto a entrega não estiver no lugar, a suíte pula e a mensagem diz o que falta:
 

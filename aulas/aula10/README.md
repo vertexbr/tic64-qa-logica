@@ -19,7 +19,7 @@ Da raiz do repositório, o mesmo comando de teste roda com o caminho completo,
 `pytest aulas/aula10/test_api_consulta.py aulas/aula10/test_produtos.py -v`.
 
 Contagem conferida rodando os quatro arquivos contra a API real em 08/09/2026, com Python 3.13.5,
-pytest 9.1.1 e requests 2.34.2: os dois scripts saem com exit code 0, e os sete testes dos dois
+pytest 9.0.2 e requests 2.32.5: os dois scripts saem com exit code 0, e os sete testes dos dois
 arquivos de suíte passam.
 
 ## Arquivos
@@ -130,8 +130,10 @@ pytest tests/test_consulta_aula10.py -v
 ```
 
 Diferente das suítes das Aulas 08 e 09, esta não compara sua entrega contra um gabarito fixo: ela
-carrega os **seus** testes e roda cada um de verdade contra a API. Ela cobra duas coisas, e só
-duas: pelo menos três funções começando com `test_`, e todas passando. Seguir a ordem canônica de
+entrega os **seus** testes ao pytest, num processo separado, com o mesmo comando que você usaria
+na mão. Ela cobra duas coisas, e só duas: pelo menos três casos de teste coletados, e todos
+passando. Quem escrever um `@pytest.mark.parametrize` da Aula 9 conta cada linha da massa como um
+caso, porque é assim que o pytest conta. Seguir a ordem canônica de
 asserção (status, existência, valor) e nunca validar dado específico de outra pessoa são regras
 da aula, e ficam para a correção humana ler, porque um teste pode passar hoje e estar errado do
 mesmo jeito que a Aula 11 vai mostrar.
