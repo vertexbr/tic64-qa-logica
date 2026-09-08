@@ -20,7 +20,7 @@ Da raiz do repositório o mesmo teste roda com o caminho completo, `pytest aulas
 | `test_aula09_idade_na_mao.py` | 5 passed | os cinco casos escritos um por um, e o incômodo que a aula usa |
 | `test_aula09_idade_parametrizado.py` | 5 passed | os mesmos cinco, numa função só |
 | `test_aula09_tabela_decisao.py` | 4 passed | a tabela de decisão virando massa, com `ids` |
-| `test_aula09_senha_e_frete.py` | 7 passed | dois `parametrize` no mesmo arquivo |
+| `test_aula09_senha_e_frete.py` | 8 passed | dois `parametrize` no mesmo arquivo |
 | `test_aula09_do_csv.py` | 4 passed | o desafio extra: a massa vinda de arquivo |
 | `test_aula09_frete_quebrado.py` | 1 failed, 2 passed | o nome do caso dentro da falha |
 | `test_aula09_nome_errado.py` | erro de coleta | `parameterize` escrito com "e" no meio |
@@ -61,7 +61,7 @@ As quatro funções, e de onde cada uma vem:
 | `validar_idade_minima` | `aulas/aula08/aula08_regras.py` | a escolha de quais idades testar: 17, 18 e 19 |
 | `tem_frete_gratis` | `aulas/aula06/aula06_funcoes_da_loja.py` | a massa 249.99, 250.00 e 300.00 |
 | `senha_valida` | `aulas/aula06/aula06_senha_valida.py` | uma massa que mistura valor-limite e partição |
-| `classificar_nota` | a escada da Aula 03, com o retorno antecipado da Aula 06 | enxergar que ela tem três fronteiras, não uma |
+| `classificar_nota` | a escada da Aula 03, com o retorno antecipado da Aula 06 | usar três valores em cada uma das três fronteiras |
 
 Tem uma quinta, `desconto_vip`, que é a regra de desconto da Aula 03 reduzida às duas condições que cabem numa tabela de decisão projetável. **O nome não é `calcular_desconto` de propósito:** aquele nome foi fixado pela atividade da Aula 08, com quatro parâmetros, e reaproveitar o nome com outra assinatura uma aula depois faria você importar a função errada.
 
@@ -73,7 +73,9 @@ Ele existe para o `test_aula09_frete_quebrado.py` ficar vermelho, e o que intere
 
 ## `test_aula09_idade_na_mao.py`
 
-Os cinco casos escritos um por um, cada um na própria função.
+Os cinco casos escritos um por um, cada um na própria função. Os valores 17, 18 e 19 cobrem a
+fronteira. Os valores 0 e 120 repetem partições já cobertas e entram apenas para deixar a
+duplicação visível antes da refatoração.
 
 ```bash
 cd aulas/aula09
@@ -139,9 +141,9 @@ test_aula09_tabela_decisao.py::test_tabela_de_decisao_do_desconto[comum_abaixo_d
 
 ## `test_aula09_senha_e_frete.py`
 
-Dois `parametrize` no mesmo arquivo, sete testes no relatório. Cada decorador governa só a função imediatamente abaixo dele.
+Dois `parametrize` no mesmo arquivo, oito testes no relatório. Cada decorador governa só a função imediatamente abaixo dele.
 
-A massa da senha mistura as duas técnicas de propósito: as duas primeiras linhas são valor-limite (7 e 8 caracteres), e as duas últimas são partição de outra natureza, porque "sem maiúscula" e "sem número" são grupos de comportamento, não vizinhos de número.
+A massa da senha mistura duas técnicas: as três primeiras linhas usam 7, 8 e 9 caracteres, e as duas últimas cobrem as partições "sem maiúscula" e "sem número".
 
 ## `test_aula09_frete_quebrado.py`
 
@@ -177,7 +179,7 @@ E   Failed: Unknown 'parameterize' mark, did you mean 'parametrize'?
 !!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
 ```
 
-O pytest atual recusa e sugere o nome certo. Em versões mais antigas isso passava como aviso e o teste simplesmente sumia do relatório sem ninguém notar, o que é bem pior.
+Na versão usada no curso, o pytest interrompe a coleta e sugere o nome certo.
 
 ## `test_aula09_massa_desalinhada.py`
 
@@ -257,3 +259,7 @@ A entrega não é código: é **massa de teste**, no arquivo `entregas/massa_aul
 ```bash
 pytest tests/test_massa_aula09.py -v
 ```
+
+A nota é um número inteiro de 0 a 100. A massa deve ter de 9 a 12 linhas e cobrir 69, 70 e 71;
+79, 80 e 81; 89, 90 e 91. Cada linha leva um `id` legível e único, além do resultado esperado
+correto.

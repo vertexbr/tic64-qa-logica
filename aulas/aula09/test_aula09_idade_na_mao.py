@@ -3,15 +3,15 @@
 # Este arquivo é a DOR, e a dor é o conteúdo. Ele existe para ficar na tela em
 # silêncio por quinze segundos antes de o parametrize aparecer.
 #
-# Os cinco casos não foram escolhidos no chute. Eles saem das duas técnicas do
-# primeiro ciclo: 17, 18 e 19 são a análise de valor-limite da fronteira 18, e
-# 0 e 120 são um representante de cada extremo das duas partições.
+# Os três primeiros casos cobrem a fronteira: 17, 18 e 19. Os casos 0 e 120
+# repetem partições já cobertas e entram apenas para tornar a duplicação visível
+# antes da refatoração. Eles não são exigidos pela técnica.
 #
 # Repare no que muda de uma função para a outra: um número e um True ou False.
 # Todo o resto é copiado. Cinco funções para carregar dez valores.
 #
 # REGRA DE NEGÓCIO (o que o slide projeta e o professor lê no início):
-#   Cadastro é liberado a partir de 18 anos, e 18 entra.
+#   A idade já cadastrada é inteiro não negativo. A partir de 18, libera.
 from aula09_regras import validar_idade_minima
 
 
@@ -69,13 +69,13 @@ def test_idade_120_e_aceita():
 #      27  assert validar_idade_minima(19) == True
 #
 #      30  def test_idade_0_e_rejeitada():
-#          Um representante do extremo da partição de baixo. Não é fronteira:
-#          é a prova de que o grupo inteiro se comporta igual.
+#          Representante distante da fronteira. Repete uma partição já coberta
+#          e entra para deixar a duplicação visível.
 #
 #      31  assert validar_idade_minima(0) == False
 #
 #      34  def test_idade_120_e_aceita():
-#          Um representante do extremo da partição de cima.
+#          Outro representante distante. Também é redundante para cobertura.
 #
 #      35  assert validar_idade_minima(120) == True
 #

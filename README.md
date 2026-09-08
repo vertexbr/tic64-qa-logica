@@ -2538,7 +2538,8 @@ aula depois faria você importar a função errada.
 python aulas/aula09/aula09_regras.py
 ```
 
-A `classificar_nota` é a regra da atividade desta aula, e ela tem **três** números escritos:
+A `classificar_nota` recebe uma nota inteira de 0 a 100. Ela é a regra da atividade desta aula e
+tem **três** números escritos:
 
 ```python
 def classificar_nota(nota):
@@ -2551,8 +2552,9 @@ def classificar_nota(nota):
     return "insuficiente"
 ```
 
-Três números escritos são três fronteiras, e cada fronteira pede o próprio par: 69 e 70, 79 e 80,
-89 e 90. Seis casos, e nenhum deles é 75, 85 ou 95, porque o meio da faixa é onde ninguém erra.
+Três números escritos são três fronteiras. A técnica usada nesta aula escolhe o vizinho de baixo,
+o valor exato e o vizinho de cima: 69, 70 e 71; 79, 80 e 81; 89, 90 e 91. São nove casos. Valores
+distantes, como 75, 85 e 95, não acrescentam informação a esta massa.
 
 ### `aulas/aula09/aula09_regras_frete_quebrado.py`
 
@@ -2569,8 +2571,8 @@ vermelho aparece.
 Os cinco casos escritos um por um, cada um na própria função. Está correto e está completo, e é a
 forma que você escreveria sozinho depois da Aula 08.
 
-Os cinco não foram escolhidos no chute: 17, 18 e 19 são análise de valor-limite da fronteira 18, e
-0 e 120 são um representante de cada extremo das duas partições.
+Os valores 17, 18 e 19 cobrem a fronteira. Os valores 0 e 120 repetem partições já cobertas e
+entram apenas para deixar a duplicação visível antes da refatoração.
 
 ```bash
 cd aulas/aula09
@@ -2608,8 +2610,8 @@ colunas, a lista de tuplas que é a massa, e os parâmetros na assinatura da fun
     (17, False),    # vizinho de baixo da fronteira
     (18, True),     # a fronteira, e ela entra
     (19, True),     # vizinho de cima
-    (0, False),     # extremo inferior da partição de baixo
-    (120, True),    # extremo superior da partição de cima
+    (0, False),     # representante distante; redundante para cobertura
+    (120, True),    # representante distante; redundante para cobertura
 ])
 def test_idade_minima(idade, esperado):
     assert validar_idade_minima(idade) == esperado
@@ -2686,8 +2688,8 @@ A massa nomeia colunas; a função tem a assinatura dela.
 
 ### `aulas/aula09/test_aula09_senha_e_frete.py`
 
-Dois `parametrize` no mesmo arquivo, sete testes no relatório. Um arquivo pode ter quantos precisar,
-e **cada um governa só a função imediatamente abaixo dele**.
+Dois `parametrize` no mesmo arquivo, oito testes no relatório. Um arquivo pode ter mais de um, e
+**cada decorador governa só a função imediatamente abaixo dele**.
 
 A massa da senha mistura as duas naturezas de propósito, e é isso que o `ids` deixa legível:
 
@@ -2695,24 +2697,25 @@ A massa da senha mistura as duas naturezas de propósito, e é isso que o `ids` 
 |---|---|---|
 | `sete_caracteres_recusa` | valor-limite | o vizinho de baixo da fronteira de comprimento |
 | `oito_caracteres_aceita` | valor-limite | a fronteira, e ela entra |
+| `nove_caracteres_aceita` | valor-limite | o vizinho de cima da fronteira |
 | `sem_maiuscula_recusa` | particionamento | o grupo "falta a maiúscula" |
 | `sem_numero_recusa` | particionamento | o grupo "falta o número" |
 
-Não existe uma quinta linha com senha longa e válida, e é de propósito: ela estaria na mesma
-partição da linha de oito caracteres.
+Depois de 7, 8 e 9, outra senha longa e válida repetiria a mesma partição sem acrescentar informação.
 
 ```
-collected 7 items
+collected 8 items
 
 test_aula09_senha_e_frete.py::test_politica_de_senha[sete_caracteres_recusa] PASSED
 test_aula09_senha_e_frete.py::test_politica_de_senha[oito_caracteres_aceita] PASSED
+test_aula09_senha_e_frete.py::test_politica_de_senha[nove_caracteres_aceita] PASSED
 test_aula09_senha_e_frete.py::test_politica_de_senha[sem_maiuscula_recusa] PASSED
 test_aula09_senha_e_frete.py::test_politica_de_senha[sem_numero_recusa] PASSED
 test_aula09_senha_e_frete.py::test_frete_gratis[um_centavo_abaixo] PASSED
 test_aula09_senha_e_frete.py::test_frete_gratis[exatamente_no_limite] PASSED
 test_aula09_senha_e_frete.py::test_frete_gratis[bem_acima] PASSED
 
-============================== 7 passed in 0.04s ==============================
+============================== 8 passed in 0.04s ==============================
 ```
 
 ### `aulas/aula09/test_aula09_frete_quebrado.py`
@@ -2755,8 +2758,7 @@ E   Failed: Unknown 'parameterize' mark, did you mean 'parametrize'?
 !!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
 ```
 
-O pytest atual recusa e sugere o nome certo na própria mensagem. Em versões mais antigas isso
-passava como aviso e o teste simplesmente sumia do relatório sem ninguém notar, que é bem pior.
+Na versão usada no curso, o pytest interrompe a coleta e sugere o nome certo na própria mensagem.
 
 ### `aulas/aula09/test_aula09_massa_desalinhada.py`
 
@@ -2772,8 +2774,8 @@ must be equal to the number of values (3):
   (18, True, 'extra')
 ```
 
-A mensagem é boa e diz os dois números, mas ela aparece na **coleta**: nada roda, nem os testes dos
-outros arquivos, e a tela parece que quebrou tudo. É uma vírgula.
+A mensagem diz os dois números, mas aparece na **coleta**: nada roda, nem os testes dos outros
+arquivos. Neste exemplo, uma tupla tem um valor a mais que a lista de nomes.
 
 A conferência antes de rodar cabe numa frase: conte os nomes da string, conte os valores da primeira
 linha, e veja se são iguais. A mesma conta vale para o `ids`.
@@ -3186,20 +3188,23 @@ O que aparece verde é a **sua** massa rodando de verdade contra a regra, uma li
 
 Ela cobra quatro coisas, e cada uma é um ponto da aula:
 
-1. As **três fronteiras** cobertas, cada uma com o próprio par: 69 e 70, 79 e 80, 89 e 90.
+1. As **três fronteiras** cobertas com três valores em cada uma: 69, 70 e 71; 79, 80 e 81;
+   89, 90 e 91.
 2. O **esperado de cada linha** batendo com a regra. É esta que recusa a linha escrita para falhar,
    e a mensagem dela diz isso com todas as letras.
-3. A massa **enxuta**, entre 6 e 10 linhas. Notas na mesma faixa se comportam igual.
+3. A massa **enxuta**, entre 9 e 12 linhas. Notas na mesma faixa se comportam igual.
 4. Um `id` **legível e único** por linha. Nome de caso é diagnóstico.
 
 Enquanto a entrega não estiver no lugar, a suíte inteira pula e a mensagem diz o que falta:
 
 ```
 =========================== short test summary info ===========================
-SKIPPED [1] tests	est_massa_aula09.py:83: A entrega da Aula 09 ainda não está no lugar. Crie o arquivo 'entregas/massa_aula09.csv' na raiz do repositório, com as colunas id;nota;esperado separadas por ponto e vírgula, uma linha por caso de teste. Use 'aulas/aula09/aula09_massa_notas.csv' como modelo de formato. Depois rode de novo.
+SKIPPED [1] tests/test_massa_aula09.py: A entrega da Aula 09 ainda não está no lugar. Crie o arquivo 'entregas/massa_aula09.csv' na raiz do repositório, com as colunas id;nota;esperado separadas por ponto e vírgula, uma linha por caso de teste. Use 'aulas/aula09/aula09_massa_notas.csv' como modelo de formato. Depois rode de novo.
+============================== 1 skipped in 0.01s ==============================
 ```
 
-O pulo não é reprovação: é a suíte avisando que não achou a sua entrega.
+O pulo não é reprovação: é a suíte avisando que não achou a sua entrega. O comando termina com
+exit code 0, então a IDE não confunde essa orientação com uma execução quebrada.
 
 ### `tests/test_consulta_aula10.py`
 

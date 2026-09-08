@@ -1,13 +1,13 @@
 # Aula 09 - a solução do segundo bloco, com dois parametrize no mesmo arquivo
 #
-# Duas regras, dois parametrize, sete testes no relatório. Um arquivo pode ter
+# Duas regras, dois parametrize, oito testes no relatório. Um arquivo pode ter
 # quantos parametrize precisar, e cada um governa só a função abaixo dele.
 #
-# A massa da senha mistura as duas naturezas de propósito, e é isso que o ids
-# deixa legível. As duas primeiras linhas são valor-limite puro: 7 e 8
-# caracteres, vizinho e fronteira. As duas últimas são partição de outra
-# natureza, porque "sem maiúscula" e "sem número" são grupos de comportamento,
-# não vizinhos de número.
+# A massa da senha mistura duas técnicas. As três primeiras linhas usam 7, 8 e
+# 9 caracteres, vizinho, fronteira e vizinho. As duas últimas cobrem as
+# partições "sem maiúscula" e "sem número", que não são vizinhas numéricas.
+# O ids deixa essas escolhas legíveis no relatório.
+# Cada linha leva o resultado esperado e deve passar.
 #
 # REGRA DE NEGÓCIO (o que o slide projeta e o professor lê no início):
 #   Senha vale com 8 ou mais caracteres, ao menos um número e ao menos uma
@@ -20,11 +20,13 @@ from aula09_regras import senha_valida, tem_frete_gratis
 @pytest.mark.parametrize("senha,esperado", [
     ("Abc1234", False),
     ("Abc12345", True),
+    ("Abc123456", True),
     ("abcdefgh1", False),
     ("Abcdefghi", False),
 ], ids=[
     "sete_caracteres_recusa",
     "oito_caracteres_aceita",
+    "nove_caracteres_aceita",
     "sem_maiuscula_recusa",
     "sem_numero_recusa",
 ])
@@ -59,7 +61,7 @@ def test_frete_gratis(total, esperado):
 #          ... import da Aula 06.
 #
 #      20  @pytest.mark.parametrize("senha,esperado", [
-#          O primeiro decorador. Ele alcança a função da linha 31 e mais
+#          O primeiro decorador. Ele alcança a função da linha 33 e mais
 #          nenhuma.
 #
 #      21  ("Abc1234", False),
@@ -70,29 +72,33 @@ def test_frete_gratis(total, esperado):
 #          Oito caracteres. A fronteira, e ela entra, porque a regra diz "8 ou
 #          mais".
 #
-#      23  ("abcdefgh1", False),
-#          Nove caracteres, tem número, e não tem maiúscula. Partição de outra
-#          natureza: não é vizinho de número nenhum, é um grupo de
-#          comportamento.
+#      23  ("Abc123456", True),
+#          Nove caracteres. Vizinho de cima da fronteira.
 #
-#      24  ("Abcdefghi", False),
-#          Nove caracteres, tem maiúscula, e não tem número. O outro grupo.
+#      24  ("abcdefgh1", False),
+#          Nove caracteres, tem número e não tem maiúscula. Partição de outra
+#          natureza: não é vizinho numérico, é um grupo de comportamento.
 #
-#      25  ], ids=[
+#      25  ("Abcdefghi", False),
+#          Nove caracteres, tem maiúscula e não tem número. O outro grupo.
 #
-#      26  "sete_caracteres_recusa",
-#          O nome diz o que a linha exercita, não o valor dela.
+#      26  ], ids=[
 #
-#      27  "oito_caracteres_aceita",
+#      27  "sete_caracteres_recusa",
+#          O nome diz o que a linha exercita, não apenas o valor dela.
 #
-#      28  "sem_maiuscula_recusa",
+#      28  "oito_caracteres_aceita",
 #
-#      29  "sem_numero_recusa",
+#      29  "nove_caracteres_aceita",
 #
-#      30  ])
+#      30  "sem_maiuscula_recusa",
 #
-#      31  def test_politica_de_senha(senha, esperado):
+#      31  "sem_numero_recusa",
 #
-#      32  assert senha_valida(senha) == esperado
+#      32  ])
+#
+#      33  def test_politica_de_senha(senha, esperado):
+#
+#      34  assert senha_valida(senha) == esperado
 #
 # --- fim da explicacao linha a linha ---

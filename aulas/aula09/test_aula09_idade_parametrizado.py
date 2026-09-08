@@ -1,8 +1,8 @@
 # Aula 09 - as mesmas cinco linhas, numa função só
 #
 # Compare com test_aula09_idade_na_mao.py, ao lado: os casos são exatamente os
-# mesmos, e o relatório continua mostrando cinco testes. O que sumiu foram as
-# vinte e poucas linhas que existiam só para repetir a mesma chamada.
+# mesmos, e o relatório continua mostrando cinco testes. O arquivo tem o mesmo
+# número de linhas de código, mas a chamada e o assert aparecem uma vez.
 #
 # Três coisas novas, e são só três:
 #   1. a string "idade,esperado" dá nome às colunas da planilha;
@@ -10,11 +10,11 @@
 #   3. a função de teste recebe esses dois nomes como parâmetros, que é o
 #      parâmetro de função da Aula 06 chegando no teste.
 #
-# O comentário ao lado de cada linha é a técnica que escolheu aquele valor.
-# Escrever a lista antes de escrever o código é o passo que a maioria pula.
+# O comentário ao lado de cada linha registra por que aquele valor foi usado.
+# Escreva a lista antes do código para revisar a escolha sem ruído de sintaxe.
 #
 # REGRA DE NEGÓCIO (o que o slide projeta e o professor lê no início):
-#   Cadastro é liberado a partir de 18 anos, e 18 entra.
+#   A idade já cadastrada é inteiro não negativo. A partir de 18, libera.
 import pytest
 
 from aula09_regras import validar_idade_minima
@@ -24,8 +24,8 @@ from aula09_regras import validar_idade_minima
     (17, False),    # vizinho de baixo da fronteira
     (18, True),     # a fronteira, e ela entra
     (19, True),     # vizinho de cima
-    (0, False),     # extremo inferior da partição de baixo
-    (120, True),    # extremo superior da partição de cima
+    (0, False),     # representante distante; redundante para cobertura
+    (120, True),    # representante distante; redundante para cobertura
 ])
 def test_idade_minima(idade, esperado):
     assert validar_idade_minima(idade) == esperado
@@ -59,9 +59,11 @@ def test_idade_minima(idade, esperado):
 #
 #      26  (19, True),     # vizinho de cima
 #
-#      27  (0, False),     # extremo inferior da partição de baixo
+#      27  (0, False),     # representante distante; redundante para cobertura
+#          Caso adicional da demonstração, não exigido pela técnica.
 #
-#      28  (120, True),    # extremo superior da partição de cima
+#      28  (120, True),    # representante distante; redundante para cobertura
+#          Mesmo papel na partição aceita.
 #
 #      29  ])
 #          Fecha a lista e fecha a chamada do decorador. O colchete fecha a

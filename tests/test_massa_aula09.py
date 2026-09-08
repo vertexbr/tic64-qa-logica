@@ -30,6 +30,7 @@ por vez, com o SEU nome em cada uma. É o mesmo relatório que a aula mostrou.
 
 A REGRA QUE A SUA MASSA PRECISA COBRIR
 
+    A nota é um número inteiro de 0 a 100.
     Nota de 90 para cima é "excelente".
     De 80 a 89 é "bom".
     De 70 a 79 é "suficiente".
@@ -46,13 +47,13 @@ A REGRA QUE A SUA MASSA PRECISA COBRIR
 
 O QUE ESTA SUÍTE COBRA, E POR QUÊ
 
-- Três fronteiras, três pares. A regra tem 70, 80 e 90 escritos nela, e cada
-  fronteira pede o próprio valor e o vizinho de baixo. São seis linhas
-  obrigatórias, e é onde o defeito mora.
+- Três fronteiras, três valores em cada uma. A regra tem 70, 80 e 90 escritos
+  nela. Esta atividade usa o vizinho de baixo, o valor exato e o vizinho de
+  cima. São nove linhas obrigatórias.
 - Todo `esperado` correto. Massa com linha inválida esperando falhar é entrega
   recusada: o esperado é a última coluna, e a suíte fica toda verde. Falha
   significa defeito, nunca "essa linha era pra falhar".
-- Massa enxuta. Entre 6 e 10 linhas. Cinco notas na mesma partição são cinco
+- Massa enxuta. Entre 9 e 12 linhas. Cinco notas na mesma partição são cinco
   testes rodando e uma informação só.
 - `id` legível e único em cada linha.
 """
@@ -69,24 +70,22 @@ CAMINHOS = (RAIZ / "entregas" / "massa_aula09.csv",
             RAIZ / "massa_aula09.csv",
             RAIZ / "tests" / "massa_aula09.csv")
 
-# As três fronteiras da regra, cada uma com o par que ela obriga: o vizinho de
-# baixo e o valor da fronteira. Escolhidas à mão, não sorteadas, porque
-# valor-limite se escolhe.
-FRONTEIRAS = ((69, 70), (79, 80), (89, 90))
+# As três fronteiras da regra. A atividade usa a mesma técnica ensinada na
+# aula: vizinho de baixo, valor da fronteira e vizinho de cima.
+FRONTEIRAS = ((69, 70, 71), (79, 80, 81), (89, 90, 91))
 
-MINIMO_DE_LINHAS = 6
-MAXIMO_DE_LINHAS = 10
+MINIMO_DE_LINHAS = 9
+MAXIMO_DE_LINHAS = 12
 
 _ENTREGA = next((p for p in CAMINHOS if p.is_file()), None)
 
-if _ENTREGA is None:
-    pytest.skip(
-        "A entrega da Aula 09 ainda não está no lugar. Crie o arquivo "
-        "'entregas/massa_aula09.csv' na raiz do repositório, com as colunas "
-        "id;nota;esperado separadas por ponto e vírgula, uma linha por caso de "
-        "teste. Use 'aulas/aula09/aula09_massa_notas.csv' como modelo de "
-        "formato. Depois rode de novo.",
-        allow_module_level=True)
+_MENSAGEM_SEM_ENTREGA = (
+    "A entrega da Aula 09 ainda não está no lugar. Crie o arquivo "
+    "'entregas/massa_aula09.csv' na raiz do repositório, com as colunas "
+    "id;nota;esperado separadas por ponto e vírgula, uma linha por caso de "
+    "teste. Use 'aulas/aula09/aula09_massa_notas.csv' como modelo de "
+    "formato. Depois rode de novo."
+)
 
 
 def classificar_nota(nota):
@@ -168,12 +167,21 @@ def _converter(linhas):
                 f"número inteiro, e veio {bruto!r}.\n"
                 f"  O Python disse: {nota_invalida}",
                 pytrace=False)
+        if not 0 <= nota <= 100:
+            pytest.fail(
+                f"Linha {numero} do {_ENTREGA.name}: a nota precisa ficar entre 0 "
+                f"e 100, e veio {nota}.",
+                pytrace=False)
         massa.append((identificador, nota, esperado, numero))
     return massa
 
 
-_LINHAS = _ler_entrega()
-_MASSA = _converter(_LINHAS)
+if _ENTREGA is None:
+    _LINHAS = []
+    _MASSA = []
+else:
+    _LINHAS = _ler_entrega()
+    _MASSA = _converter(_LINHAS)
 
 # A massa da SUA entrega alimenta o parametrize abaixo, com os SEUS ids. É o
 # mesmo mecanismo da aula: uma função de teste, uma linha por caso, e o nome de
@@ -182,7 +190,7 @@ _IDS = [f"{item[0] or 'linha_' + str(item[3])}" for item in _MASSA]
 
 
 @pytest.mark.parametrize("identificador,nota,esperado,numero", _MASSA, ids=_IDS)
-def test_cada_linha_da_massa_tem_o_esperado_certo(identificador, nota, esperado, numero):
+def _test_cada_linha_da_massa_tem_o_esperado_certo(identificador, nota, esperado, numero):
     """O esperado de cada linha bate com o que a regra manda.
 
     Este é o teste que recusa a massa com dado inválido esperando falhar. Se ele
@@ -203,15 +211,17 @@ def test_cada_linha_da_massa_tem_o_esperado_certo(identificador, nota, esperado,
             pytrace=False)
 
 
-def test_as_tres_fronteiras_estao_cobertas():
-    """Cada número escrito na regra pede o próprio valor e o vizinho de baixo."""
+def _test_as_tres_fronteiras_estao_cobertas():
+    """Cada fronteira usa o vizinho de baixo, o valor e o vizinho de cima."""
     notas = {nota for _i, nota, _e, _n in _MASSA}
     faltando = []
-    for vizinho, fronteira in FRONTEIRAS:
+    for vizinho_baixo, fronteira, vizinho_cima in FRONTEIRAS:
         if fronteira not in notas:
             faltando.append(f"{fronteira} (a fronteira em si)")
-        if vizinho not in notas:
-            faltando.append(f"{vizinho} (o vizinho de baixo de {fronteira})")
+        if vizinho_baixo not in notas:
+            faltando.append(f"{vizinho_baixo} (o vizinho de baixo de {fronteira})")
+        if vizinho_cima not in notas:
+            faltando.append(f"{vizinho_cima} (o vizinho de cima de {fronteira})")
 
     if faltando:
         pytest.fail(
@@ -220,19 +230,18 @@ def test_as_tres_fronteiras_estao_cobertas():
             "  o que falta ............... " + "; ".join(faltando) + "\n"
             "  a regra ................... a regra tem 70, 80 e 90 escritos nela.\n"
             "                              Achou um número no critério de aceite,\n"
-            "                              teste o número e o anterior. É onde o >=\n"
-            "                              trocado por > aparece, e é o defeito mais\n"
-            "                              comum que existe.",
+            "                              teste o anterior, o valor e o seguinte.\n"
+            "                              A mesma técnica vale para as três fronteiras.",
             pytrace=False)
 
 
-def test_a_massa_e_enxuta():
+def _test_a_massa_e_enxuta():
     """Cada linha da massa é um teste a mais rodando, e repetição não informa."""
     quantidade = len(_MASSA)
     if quantidade < MINIMO_DE_LINHAS:
         pytest.fail(
             f"A sua massa tem {quantidade} linhas, e as três fronteiras sozinhas já\n"
-            f"  pedem {MINIMO_DE_LINHAS}: 69, 70, 79, 80, 89 e 90.",
+            f"  pedem {MINIMO_DE_LINHAS}: 69, 70, 71, 79, 80, 81, 89, 90 e 91.",
             pytrace=False)
     if quantidade > MAXIMO_DE_LINHAS:
         # Duas notas na mesma faixa testam a mesma coisa duas vezes.
@@ -252,7 +261,7 @@ def test_a_massa_e_enxuta():
             pytrace=False)
 
 
-def test_cada_linha_tem_um_id_legivel_e_unico():
+def _test_cada_linha_tem_um_id_legivel_e_unico():
     """O id é o que faz o relatório dizer QUAL caso falhou."""
     identificadores = [i for i, _n, _e, _num in _MASSA]
 
@@ -279,3 +288,25 @@ def test_cada_linha_tem_um_id_legivel_e_unico():
             "  Número é o que o pytest já mostraria sozinho. O id serve para dizer o\n"
             "  que a linha exercita, como 'fronteira_70_entra' ou 'vizinho_de_baixo_69'.",
             pytrace=False)
+
+
+# Um arquivo ausente precisa produzir um pulo real, não uma coleta vazia. O
+# pytest usa exit code 5 quando o módulo inteiro chama skip durante a coleta.
+# Com um item pulado, o aluno recebe a mesma orientação e o processo termina
+# com exit code 0. Quando a entrega existe, os quatro testes reais são expostos
+# com os nomes que aparecem no material da aula.
+if _ENTREGA is None:
+    @pytest.mark.skip(reason=_MENSAGEM_SEM_ENTREGA)
+    def test_a_entrega_da_aula09_esta_no_lugar():
+        """Orienta sem reprovar enquanto o CSV ainda não foi criado."""
+else:
+    test_cada_linha_da_massa_tem_o_esperado_certo = (
+        _test_cada_linha_da_massa_tem_o_esperado_certo
+    )
+    test_as_tres_fronteiras_estao_cobertas = (
+        _test_as_tres_fronteiras_estao_cobertas
+    )
+    test_a_massa_e_enxuta = _test_a_massa_e_enxuta
+    test_cada_linha_tem_um_id_legivel_e_unico = (
+        _test_cada_linha_tem_um_id_legivel_e_unico
+    )

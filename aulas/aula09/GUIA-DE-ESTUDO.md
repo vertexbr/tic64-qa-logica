@@ -28,7 +28,7 @@ def tem_frete_gratis(total):
     return total >= 250.00
 ```
 
-**Treino:** olhe a `classificar_nota`, no fim do arquivo, e conte quantos números estão escritos nela. Cada número é uma fronteira, e cada fronteira pede dois valores. Escreva a lista dos seis antes de olhar o próximo arquivo.
+**Treino:** olhe a `classificar_nota`, no fim do arquivo, e conte quantos números estão escritos nela. Cada número é uma fronteira. Nesta aula, use três valores em cada uma: o anterior, o valor exato e o seguinte. Escreva os nove casos antes de olhar o próximo arquivo.
 
 ## `test_aula09_idade_na_mao.py`
 
@@ -44,6 +44,9 @@ def test_idade_18_e_aceita():
 ```
 
 **Treino:** conte quantas vezes o `def`, a chamada e o `assert` aparecem. São cinco de cada, para carregar dez valores. Guarde o número: o arquivo parametrizado da próxima seção tem o mesmo tamanho, e o que muda é isto.
+
+Os valores 17, 18 e 19 cobrem a fronteira. Os valores 0 e 120 são redundantes para cobertura e
+entram apenas para deixar a repetição visível antes da refatoração.
 
 ## `test_aula09_idade_parametrizado.py`
 
@@ -85,9 +88,11 @@ Dois `parametrize` no mesmo arquivo, e cada um governa só a função abaixo del
 @pytest.mark.parametrize("senha,esperado", [
     ("Abc1234", False),
     ("Abc12345", True),
+    ("Abc123456", True),
 ], ids=[
     "sete_caracteres_recusa",
     "oito_caracteres_aceita",
+    "nove_caracteres_aceita",
 ])
 def test_politica_de_senha(senha, esperado):
     assert senha_valida(senha) == esperado
@@ -144,3 +149,7 @@ A entrega não é código: é massa de teste, em `entregas/massa_aula09.csv`. A 
 ```bash
 pytest tests/test_massa_aula09.py -v
 ```
+
+A nota é um número inteiro de 0 a 100. A suíte exige de 9 a 12 linhas e os valores 69, 70 e 71;
+79, 80 e 81; 89, 90 e 91. Cada linha precisa ter `id` legível e único e o resultado esperado
+correto.

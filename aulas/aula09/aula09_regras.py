@@ -8,16 +8,16 @@
 # já existe, e depois colapsar os casos escolhidos num parametrize.
 #
 # REGRA DE NEGÓCIO (o que o slide projeta e o professor lê no início):
-#   Cadastro é liberado a partir de 18 anos, e 18 entra. Frete é grátis a
-#   partir de R$ 250,00, e 250,00 entra. Senha vale com 8 ou mais caracteres,
-#   ao menos um número e ao menos uma maiúscula. Nota de 90 para cima é
-#   excelente, de 80 a 89 é bom, de 70 a 79 é suficiente, abaixo disso é
+#   Idade já cadastrada é inteiro não negativo; cadastro libera a partir de 18.
+#   Frete é grátis a partir de R$ 250,00. Senha vale com 8 ou mais caracteres,
+#   ao menos um número e uma maiúscula. Nota é inteiro de 0 a 100: 90 para cima
+#   é excelente, 80 a 89 é bom, 70 a 79 é suficiente e abaixo disso é
 #   insuficiente.
 
 
-# Mesma regra de aulas/aula08/aula08_regras.py, sem uma vírgula de diferença.
-# O acréscimo desta aula não está no código: está na escolha de quais idades
-# testar. A fronteira é 18, então os valores obrigatórios são 17, 18 e 19.
+# Mesma regra de aulas/aula08/aula08_regras.py. A entrada já foi validada como
+# inteiro não negativo: esta função decide a liberação, não valida o cadastro.
+# A fronteira é 18, então a aula usa 17, 18 e 19.
 def validar_idade_minima(idade):
     return idade >= 18
 
@@ -47,9 +47,9 @@ def senha_valida(senha):
     return tem_numero and tem_maiuscula
 
 
-# A escada de faixas da Aula 03, no formato de retorno antecipado que a Aula 06
-# ensinou. O acréscimo desta aula é enxergar que ela tem TRÊS fronteiras, 70,
-# 80 e 90, e que cada uma pede o próprio par de valores.
+# A escada de faixas da Aula 03, com nota inteira de 0 a 100. O acréscimo desta
+# aula é enxergar três fronteiras, 70, 80 e 90, e usar três valores em cada:
+# vizinho de baixo, valor exato e vizinho de cima.
 def classificar_nota(nota):
     if nota >= 90:
         return "excelente"
