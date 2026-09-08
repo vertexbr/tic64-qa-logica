@@ -1,9 +1,17 @@
-# Aula 10 - segundo bloco de pratica: produtos, estrutura e o primeiro cenario negativo
+# Aula 10 - segunda demonstração: produtos, estrutura e o primeiro cenário negativo
 #
 # Rodar de dentro da pasta: pytest test_produtos.py -v
-# Rodar da raiz do repositorio: pytest aulas/aula10/test_produtos.py -v
+# Rodar da raiz do repositório: pytest aulas/aula10/test_produtos.py -v
 #
-# Os dois ultimos testes sao o gabarito do desafio extra, para quem terminou antes.
+# Os dois últimos testes são os extras da aula, e o segundo deles é o que fecha o assunto dos
+# dois 400 com corpos diferentes.
+#
+# REGRA DE NEGÓCIO (o que o slide projeta e o professor lê no início):
+#   GET /produtos responde 200 com as chaves quantidade e produtos, e a quantidade é igual ao
+#   tamanho da lista. Cada produto tem nome e preco, e preco é inteiro maior que zero.
+#   Identificador com formato inválido é recusado com 400 e a chave id; identificador com
+#   formato válido e inexistente é recusado com 400 e a chave message.
+
 import requests
 
 BASE_URL = "https://serverest.dev"
@@ -40,7 +48,7 @@ def test_buscar_usuario_com_id_invalido_retorna_400():
     assert "id" in resposta.json()
 
 
-# --- gabarito do desafio extra ---
+# --- os dois testes extras da aula ---
 
 def test_nenhum_produto_tem_preco_invalido():
     resposta = requests.get(f"{BASE_URL}/produtos", timeout=10)
