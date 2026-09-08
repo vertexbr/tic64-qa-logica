@@ -20,9 +20,9 @@ pytest test_api_consulta.py test_produtos.py -v
 Da raiz do repositório, o mesmo comando de teste roda com o caminho completo,
 `pytest aulas/aula10/test_api_consulta.py aulas/aula10/test_produtos.py -v`.
 
-Contagem conferida rodando os seis arquivos contra a API real em 08/09/2026, com Python 3.13.5,
-pytest 9.0.2 e requests 2.32.5: os quatro scripts saem com exit code 0, e os sete testes dos dois
-arquivos de suíte passam.
+Contagem conferida rodando os seis arquivos contra a API real em 08/09/2026, com o `.venv` do
+repositório: Python 3.13.5, pytest 9.1.1 e requests 2.34.2. Os quatro scripts saem com exit code 0,
+e os sete testes dos dois arquivos de suíte passam.
 
 ## Arquivos
 
