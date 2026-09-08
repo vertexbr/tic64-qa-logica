@@ -2857,6 +2857,162 @@ estar ativo naquele terminal.
 De onde vem a `page`, o que é `get_by_role` e por que `expect` em vez de `assert` são assunto da
 Aula 12. Uma frase de função, porque a pergunta é inevitável: o Playwright dirige o navegador.
 
+### `aulas/aula10/aula10_primeiro_get.py`
+
+O primeiro GET da turma contra um servidor de verdade, `https://serverest.dev`. Status, cabeçalho
+de tipo de conteúdo, e a lista de status da Aula 4 voltando com números vindos de uma API real em
+vez de digitados à mão.
+
+```python
+import requests
+
+BASE_URL = "https://serverest.dev"
+
+resposta = requests.get(f"{BASE_URL}/usuarios", timeout=10)
+
+print(f"Status code: {resposta.status_code}")
+print(f"Content-Type: {resposta.headers.get('Content-Type')}")
+```
+
+```bash
+python aulas/aula10/aula10_primeiro_get.py
+```
+
+```
+Status code: 200
+Content-Type: application/json; charset=utf-8
+[200, 405, 400, 500]
+```
+
+A `BASE_URL` numa variável no topo é o mapa de ambientes da Aula 5 de novo: um teste, e você troca
+de ambiente mudando uma linha. O `timeout=10` diz ao Requests para desistir depois de dez segundos,
+sem o qual um servidor travado deixa o programa pendurado para sempre.
+
+A lista de status fecha sempre nos mesmos quatro números, porque as quatro URLs testam contratos
+fixos: rota que existe, rota que não existe (`405`), identificador com formato certo mas
+inexistente (`400`), e um `5xx` de propósito via `httpbin.org/status/500`. O que muda a cada
+execução é só a quantidade de usuários, que este arquivo não imprime.
+
+### `aulas/aula10/aula10_consulta_json.py`
+
+Abre o corpo da resposta com `.json()`. Até aqui só se olhou o envelope (status, cabeçalhos);
+este arquivo abre a carta.
+
+```python
+resposta = requests.get(f"{BASE_URL}/usuarios", timeout=10)
+dados = resposta.json()
+
+print(f"Tipo do que voltou: {type(dados)}")
+print(f"Chaves do corpo: {list(dados.keys())}")
+
+primeiro = dados["usuarios"][0]
+print(f"Nome: {primeiro['nome']}")
+```
+
+`dados['usuarios'][0]['nome']` se lê da esquerda para a direita, como um endereço: no corpo, a
+chave `usuarios`, dentro dela o item de posição zero, dentro dele a chave `nome`. Chave usa nome,
+posição usa número, a mesma estrutura de dicionário e lista que a Aula 5 ensinou, só que agora
+quem digitou os dados foi um servidor.
+
+Os dois erros propositais da aula ficam comentados no arquivo: `.json()` numa resposta que não é
+JSON (`JSONDecodeError`, mesmo com status 200) e a chave que não existe (`KeyError` da Aula 5, só
+que agora ele pode significar que o contrato da API mudou). Descomente uma linha por vez para ver
+cada um sozinho.
+
+O arquivo fecha com um filtro por `params`: `requests.get(url, params={"nome": nome}, timeout=10)`.
+A regra que ele ilustra é a regra da aula inteira: valide estrutura e regra, nunca valor específico
+de dado que não é seu. Um `assert quantidade == 1` quebraria no dia em que qualquer pessoa do mundo
+cadastrasse mais um usuário com aquele nome.
+
+### `aulas/aula10/test_api_consulta.py`
+
+Os três degraus da asserção (status, existência do campo, valor do campo) virando código pela
+primeira vez no curso.
+
+```python
+def test_listar_usuarios_respeita_os_tres_degraus():
+    resposta = requests.get(f"{BASE_URL}/usuarios", timeout=10)
+
+    # degrau 1: o status
+    assert resposta.status_code == 200, f"status inesperado: {resposta.status_code}"
+
+    corpo = resposta.json()
+
+    # degrau 2: a existência dos campos
+    assert "quantidade" in corpo
+    assert "usuarios" in corpo
+
+    # degrau 3: o valor, e aqui só o que é regra
+    assert corpo["quantidade"] == len(corpo["usuarios"])
+```
+
+```bash
+cd aulas/aula10
+pytest test_api_consulta.py -v
+```
+
+```
+collected 1 item
+
+test_api_consulta.py::test_listar_usuarios_respeita_os_tres_degraus PASSED
+
+============================== 1 passed in 0.74s ===============================
+```
+
+O último `assert` compara o servidor consigo mesmo, não com um número fixo: ele vale hoje com
+qualquer quantidade de usuários e continua valendo amanhã. É uma das asserções mais valiosas que
+existem em teste de API, porque contador desalinhado com a lista é defeito clássico de paginação.
+
+### `aulas/aula10/test_produtos.py`
+
+Variação do teste anterior: outro recurso (`/produtos`), verificação de **tipo** em vez de valor
+(`preco` é `int`), e o primeiro cenário negativo do curso batendo numa API real. Os dois últimos
+testes são o gabarito do desafio extra da aula.
+
+```python
+def test_produto_tem_campos_obrigatorios():
+    resposta = requests.get(f"{BASE_URL}/produtos", timeout=10)
+    assert resposta.status_code == 200
+
+    produto = resposta.json()["produtos"][0]
+    assert "nome" in produto
+    assert "preco" in produto
+    assert isinstance(produto["preco"], int), f"preço veio como {type(produto['preco'])}"
+
+
+def test_buscar_usuario_com_id_invalido_retorna_400():
+    resposta = requests.get(f"{BASE_URL}/usuarios/id_invalido", timeout=10)
+    assert resposta.status_code == 400
+    assert "id" in resposta.json()
+```
+
+```bash
+cd aulas/aula10
+pytest test_produtos.py -v
+```
+
+```
+collected 6 items
+
+test_produtos.py::test_listar_produtos_retorna_200 PASSED
+test_produtos.py::test_lista_de_produtos_tem_estrutura_esperada PASSED
+test_produtos.py::test_produto_tem_campos_obrigatorios PASSED
+test_produtos.py::test_buscar_usuario_com_id_invalido_retorna_400 PASSED
+test_produtos.py::test_nenhum_produto_tem_preco_invalido PASSED
+test_produtos.py::test_usuario_inexistente_avisa_que_nao_encontrou PASSED
+
+============================== 6 passed in 4.61s ===============================
+```
+
+O quarto teste **passa quando o servidor recusa o pedido**. É a mesma inversão do cenário negativo
+da Aula 9: o resultado esperado é a rejeição, então receber 400 é sucesso do teste.
+
+Os dois últimos testes, o gabarito do desafio extra, distinguem dois 400 por motivos diferentes:
+`id_invalido` não tem o formato de um identificador, e a API reclama do **formato** (chave `id`);
+`aaaaaaaaaaaaaaaa` tem o formato certo e não existe, e a API reclama do **conteúdo** (chave
+`message`, "Usuário não encontrado"). Dois 400, dois defeitos diferentes se um dia isso parar de
+funcionar.
+
 ### `tests/test_setup.py`
 
 A verificação de ambiente do guia de setup, agora dentro do repositório. Da Aula 08 em diante o
@@ -2973,6 +3129,48 @@ SKIPPED [1] tests	est_massa_aula09.py:83: A entrega da Aula 09 ainda não está 
 ```
 
 O pulo não é reprovação: é a suíte avisando que não achou a sua entrega.
+
+### `tests/test_consulta_aula10.py`
+
+A terceira suíte de autoverificação do curso, e ela julga uma coisa diferente das duas
+anteriores. A da Aula 08 julgava o seu **código**; a da Aula 09 julgava a sua **massa**; esta
+roda os **seus testes** de verdade contra a API real. **Prazo da atividade: véspera da Aula 11,
+14/09/2026, às 23h59.**
+
+Como usar, em três passos:
+
+1. Escreva três testes seus, no arquivo `test_consulta_serverest.py`: um produto existente
+   (busque a lista, pegue o identificador do primeiro item, busque esse item específico e
+   confira que o nome bate), um produto inexistente (`/produtos/aaaaaaaaaaaaaaaa`, status e
+   mensagem) e um filtro por nome em `/usuarios` (todo item devolvido tem o nome filtrado).
+2. Salve o arquivo em `entregas/`, na raiz do repositório. Se a pasta não existir, crie.
+3. Rode, da raiz do repositório:
+
+```bash
+pytest tests/test_consulta_aula10.py -v
+```
+
+Diferente das duas suítes anteriores, esta não compara a sua entrega contra um gabarito fixo,
+porque não existe um: o produto desta atividade é o próprio teste que você escreveu. A suíte
+carrega o seu arquivo, roda cada função que começa com `test_` de verdade contra o ServeRest, e
+reporta quantas passaram.
+
+Ela cobra duas coisas:
+
+1. **Pelo menos três funções** começando com `test_`.
+2. **Todas passando** contra a API real, no momento em que você rodar.
+
+Enquanto a entrega não estiver no lugar, a suíte pula e a mensagem diz o que falta:
+
+```
+=========================== short test summary info ===========================
+SKIPPED [1] tests/test_consulta_aula10.py: A entrega da Aula 10 ainda não está no lugar. Crie o arquivo 'entregas/test_consulta_serverest.py' na raiz do repositório, com pelo menos três funções começando com 'test_'. Depois rode de novo.
+```
+
+O que esta suíte **não** confere, de propósito: se você seguiu a ordem canônica de asserção
+(status, existência, valor) e se evitou validar dado específico de outra pessoa. Um teste pode
+passar hoje rodando contra dado que muda amanhã, e só a correção humana lê o código para achar
+essa diferença.
 
 ### `pytest.ini`
 
