@@ -2914,15 +2914,86 @@ chave `usuarios`, dentro dela o item de posição zero, dentro dele a chave `nom
 posição usa número, a mesma estrutura de dicionário e lista que a Aula 5 ensinou, só que agora
 quem digitou os dados foi um servidor.
 
-Os dois erros propositais da aula ficam comentados no arquivo: `.json()` numa resposta que não é
-JSON (`JSONDecodeError`, mesmo com status 200) e a chave que não existe (`KeyError` da Aula 5, só
-que agora ele pode significar que o contrato da API mudou). Descomente uma linha por vez para ver
-cada um sozinho.
+Os dois erros propositais da aula moram em `aula10_erro_json.py`, num arquivo próprio que roda de
+verdade. Eles ficavam comentados dentro deste, e comentário não roda: a mesma coisa passava a
+existir em dois lugares, o arquivo e o slide.
 
 O arquivo fecha com um filtro por `params`: `requests.get(url, params={"nome": nome}, timeout=10)`.
 A regra que ele ilustra é a regra da aula inteira: valide estrutura e regra, nunca valor específico
 de dado que não é seu. Um `assert quantidade == 1` quebraria no dia em que qualquer pessoa do mundo
 cadastrasse mais um usuário com aquele nome.
+
+### `aulas/aula10/aula10_consulta_api.py`
+
+O arquivo da primeira demonstração da aula: dois GET, dois recursos, só olhando. Ele não valida
+nada de propósito.
+
+```python
+resposta_produtos = requests.get(f"{BASE_URL}/produtos", timeout=10)
+print(f"Produtos, status: {resposta_produtos.status_code}")
+print(f"Produtos, tipo: {resposta_produtos.headers.get('Content-Type')}")
+
+resposta_usuarios = requests.get(f"{BASE_URL}/usuarios", timeout=10)
+print(f"Usuários, status: {resposta_usuarios.status_code}")
+```
+
+```bash
+python aulas/aula10/aula10_consulta_api.py
+```
+
+```
+Produtos, status: 200
+Produtos, tipo: application/json; charset=utf-8
+Usuários, status: 200
+```
+
+Ninguém precisou abrir navegador, e essa é a economia inteira do teste de API: quatro linhas fazem
+o que um clique fazia, e fazem cinquenta vezes em dois segundos. Mas isso ainda **não é teste**:
+está imprimindo, e imprimir não julga nada. Quem julga é você olhando a tela. Do próximo arquivo em
+diante o `print` sai e o `assert` entra.
+
+Treino que vem com ele: pedir `/usuariosss`, com três esses. A API responde **405** e a mensagem
+aponta a documentação.
+
+### `aulas/aula10/aula10_erro_json.py`
+
+Os dois erros propositais da aula, cada um numa função que roda de verdade.
+
+```python
+def erro_1_json_no_que_nao_e_json():
+    resposta = requests.get("https://the-internet.herokuapp.com/login", timeout=10)
+    print(f"Status: {resposta.status_code}")
+    try:
+        print(resposta.json())
+    except requests.exceptions.JSONDecodeError as erro:
+        print(f"{type(erro).__name__}: {erro}")
+```
+
+```bash
+python aulas/aula10/aula10_erro_json.py
+```
+
+```
+Status: 200
+JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+E o que voltou de verdade comeca assim: <!DOCTYPE html>
+
+KeyError: 'quantidadee'
+As chaves que existem de verdade: ['quantidade', 'usuarios']
+```
+
+O primeiro é o que confunde: o status está ótimo e o programa quebrou. O que voltou foi uma página
+HTML, e `.json()` só sabe abrir carta em JSON. Quando essa mensagem aparecer, a pergunta certa é
+"pedi para o endereço certo?", e `print(resposta.text)` responde.
+
+O segundo é o `KeyError` da Aula 5, com um motivo novo e mais grave: pode não ser erro de digitação
+seu, pode ser o contrato da API que mudou e ninguém avisou. Esse é defeito de verdade, e é por isso
+que o degrau dois da ordem canônica existe.
+
+**Os dois erros ficam embrulhados em `try/except` para o arquivo seguir até o fim e mostrar os dois
+na mesma execução, e isso é o oposto do que se faz num teste.** Numa suíte de verdade a falha
+interrompe, e é isso que faz o relatório significar alguma coisa. O comentário no topo do arquivo
+diz isso com estas palavras.
 
 ### `aulas/aula10/test_api_consulta.py`
 

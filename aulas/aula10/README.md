@@ -1,16 +1,18 @@
 # Aula 10 - Primeira requisição, primeira validação
 
-Demonstrações de código da Aula 10. Os dois primeiros arquivos rodam com `python` a partir da
+Demonstrações de código da Aula 10. Os quatro primeiros arquivos rodam com `python` a partir da
 raiz do repositório (`(.venv)` ativo). Os dois últimos rodam com `pytest`, de dentro desta pasta,
 nomeando o arquivo.
 
-**Todos os quatro dependem de uma API pública de verdade, `https://serverest.dev`.** Ela é
+**Todos os seis dependem de uma API pública de verdade, `https://serverest.dev`.** Ela é
 compartilhada com outros estudantes no mundo inteiro, então quantidades e conteúdos mudam a cada
 execução. Isso não é defeito dos arquivos: é o assunto da aula, e volta com solução na Aula 11.
 
 ```bash
 python aulas/aula10/aula10_primeiro_get.py
+python aulas/aula10/aula10_consulta_api.py
 python aulas/aula10/aula10_consulta_json.py
+python aulas/aula10/aula10_erro_json.py
 cd aulas/aula10
 pytest test_api_consulta.py test_produtos.py -v
 ```
@@ -18,14 +20,16 @@ pytest test_api_consulta.py test_produtos.py -v
 Da raiz do repositório, o mesmo comando de teste roda com o caminho completo,
 `pytest aulas/aula10/test_api_consulta.py aulas/aula10/test_produtos.py -v`.
 
-Contagem conferida rodando os quatro arquivos contra a API real em 08/09/2026, com Python 3.13.5,
-pytest 9.0.2 e requests 2.32.5: os dois scripts saem com exit code 0, e os sete testes dos dois
+Contagem conferida rodando os seis arquivos contra a API real em 08/09/2026, com Python 3.13.5,
+pytest 9.0.2 e requests 2.32.5: os quatro scripts saem com exit code 0, e os sete testes dos dois
 arquivos de suíte passam.
 
 ## Arquivos
 
 - `aula10_primeiro_get.py`
+- `aula10_consulta_api.py`
 - `aula10_consulta_json.py`
+- `aula10_erro_json.py`
 - `test_api_consulta.py`
 - `test_produtos.py`
 
@@ -49,11 +53,31 @@ A lista fecha sempre nesses quatro números, porque as quatro URLs testam contra
 de propósito via `httpbin.org`). O que muda a cada execução é só a quantidade de usuários, que
 este arquivo não imprime.
 
+## `aula10_consulta_api.py`
+
+O arquivo da primeira demonstração: dois GET, dois recursos, só olhando. Ele não valida nada de
+propósito, e é isso que o professor nomeia na tela.
+
+```bash
+python aulas/aula10/aula10_consulta_api.py
+```
+
+```
+Produtos, status: 200
+Produtos, tipo: application/json; charset=utf-8
+Usuários, status: 200
+```
+
+Quatro linhas fazem o que um clique fazia. Mas está imprimindo, e imprimir não julga nada: quem
+julga é você olhando a tela. Do arquivo seguinte em diante o `print` sai e o `assert` entra.
+
+O treino que vem com ele é pedir `/usuariosss`, com três esses, e ler a resposta: **405**, com a
+mensagem apontando a documentação.
+
 ## `aula10_consulta_json.py`
 
-Abre o corpo da resposta com `.json()`, mostra os dois erros propositais que a aula usa
-(`.json()` numa resposta que não é JSON, e a chave que não existe) e fecha com o filtro por
-`params`.
+Abre o corpo da resposta com `.json()`, mostra a leitura por chave e por posição, e fecha com o
+filtro por `params`.
 
 ```bash
 python aulas/aula10/aula10_consulta_json.py
@@ -63,8 +87,33 @@ O nome e a quantidade impressos variam a cada execução, porque vêm da API pú
 varia é a estrutura: um dicionário com `quantidade` e `usuarios`, e dentro de `usuarios` uma
 lista de dicionários, a mesma forma que a Aula 5 ensinou a ler.
 
-Os dois erros propositais ficam comentados no arquivo, de propósito: descomente uma linha por vez
-para ver cada um sozinho, sem que um trave a leitura do outro.
+Os dois erros propositais da aula não moram aqui: eles têm arquivo próprio,
+`aula10_erro_json.py`, que roda de verdade em vez de ficar comentado.
+
+## `aula10_erro_json.py`
+
+Os dois erros propositais da aula, cada um numa função, com `try/except` para o arquivo seguir até
+o fim e mostrar os dois na mesma execução.
+
+```bash
+python aulas/aula10/aula10_erro_json.py
+```
+
+```
+Status: 200
+JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+E o que voltou de verdade comeca assim: <!DOCTYPE html>
+
+KeyError: 'quantidadee'
+As chaves que existem de verdade: ['quantidade', 'usuarios']
+```
+
+O primeiro é o que confunde: status 200 e o programa quebrou, porque o que voltou foi HTML e
+`.json()` só abre JSON. O segundo é o `KeyError` da Aula 5 com um motivo novo: pode ser o contrato
+da API que mudou, e aí é defeito de verdade.
+
+**Engolir erro com `try/except` aqui serve para demonstrar o erro, e é o oposto do que se faz num
+teste.** Numa suíte, a falha interrompe, e é isso que faz o relatório significar alguma coisa.
 
 ## `test_api_consulta.py`
 

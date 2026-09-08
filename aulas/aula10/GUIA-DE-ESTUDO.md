@@ -32,9 +32,20 @@ print(f"Status code: {resposta.status_code}")
 
 A `BASE_URL` numa variável é o mapa de ambientes da Aula 5 de novo: um teste, e você troca de ambiente mudando uma linha.
 
+## `aula10_consulta_api.py`
+
+A primeira demonstração da aula: dois GET, dois recursos, e nenhuma validação.
+
+```python
+resposta_produtos = requests.get(f"{BASE_URL}/produtos", timeout=10)
+print(f"Produtos, status: {resposta_produtos.status_code}")
+```
+
+**Treino:** rode e conte quantas coisas este arquivo afirma. Nenhuma. Ele imprime, e imprimir não julga: quem julga é você olhando a tela. Escreva ao lado, com suas palavras, o que faltaria para isso virar teste. Depois peça `/usuariosss`, com três esses, e leia o 405 que volta.
+
 ## `aula10_consulta_json.py`
 
-Abrir o corpo com `.json()`, e os dois jeitos de quebrar isso.
+Abrir o corpo com `.json()`, e ler por chave e por posição.
 
 ```python
 dados = resposta.json()
@@ -46,7 +57,24 @@ print(f"Nome: {primeiro['nome']}")
 
 **Treino:** `dados['usuarios'][0]['nome']` se lê da esquerda para a direita, como um endereço. Escreva a leitura em português, uma palavra por colchete, antes de rodar. Depois compare com o que a Aula 5 já ensinou sobre chave (usa nome) e posição (usa número): é a mesma estrutura, só que quem digitou os dados foi um servidor.
 
-**Os dois erros de propósito estão comentados no arquivo.** Descomente o primeiro sozinho: `.json()` numa página HTML derruba com `JSONDecodeError`, mesmo o status vindo 200. Depois comente de volta e troque uma chave por outra que não existe, para ver o `KeyError` da Aula 5 de novo, só que agora ele pode significar que o contrato da API mudou.
+**Os dois erros de propósito têm arquivo próprio, `aula10_erro_json.py`.** Eles ficavam comentados aqui dentro, e comentário não roda.
+
+## `aula10_erro_json.py`
+
+Os dois jeitos de quebrar a leitura do corpo, cada um numa função que roda de verdade.
+
+```python
+resposta = requests.get("https://the-internet.herokuapp.com/login", timeout=10)
+print(f"Status: {resposta.status_code}")
+try:
+    print(resposta.json())
+except requests.exceptions.JSONDecodeError as erro:
+    print(f"{type(erro).__name__}: {erro}")
+```
+
+**Treino:** rode o arquivo e leia as duas mensagens em voz alta. O primeiro erro vem com status 200, e é isso que confunde: o status está ótimo e o programa quebrou, porque o que voltou foi HTML. O segundo é o `KeyError` da Aula 5, com um motivo novo e mais grave: o contrato da API pode ter mudado e ninguém avisou. Escreva as duas causas possíveis de um `KeyError` num teste de API antes de ler o parágrafo acima de novo.
+
+**E repare no `try/except`:** ele está aqui para o arquivo seguir até o fim e mostrar os dois erros na mesma execução. Num teste de verdade isso é o oposto do que se faz, porque a falha precisa interromper.
 
 ## `test_api_consulta.py`
 
