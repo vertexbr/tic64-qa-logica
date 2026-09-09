@@ -3086,6 +3086,235 @@ Os dois últimos testes, o gabarito do desafio extra, distinguem dois 400 por mo
 `message`, "Usuário não encontrado"). Dois 400, dois defeitos diferentes se um dia isso parar de
 funcionar.
 
+### `aulas/aula11/aula11_problema_do_dia.py`
+
+O problema que a Aula 11 inteira existe para resolver. Ele manda o **mesmo cadastro duas vezes**,
+com o mesmo e-mail, e as duas respostas são diferentes.
+
+```bash
+python aulas/aula11/aula11_problema_do_dia.py
+```
+
+```
+Primeira chamada -> 201 {'message': 'Cadastro realizado com sucesso', '_id': 'nsrDogkSAwzhvQDE'}
+Segunda chamada  -> 400 {'message': 'Este email já está sendo usado'}
+```
+
+Não mudou uma letra do código entre as duas linhas: mudou o **estado do servidor**, porque a
+primeira chamada deixou um dado lá. Se isso estivesse dentro de um teste com
+`assert status == 201`, ele passaria na primeira execução e falharia na segunda, e falharia pelo
+motivo errado: não há defeito nenhum, a regra de e-mail único está funcionando.
+
+A última linha apaga o usuário criado, e é ela que faz o arquivo poder rodar de novo sempre com o
+mesmo resultado. O `_id` é diferente a cada execução.
+
+### `aulas/aula11/aula11_post_usuario.py`
+
+O POST com corpo, e as três coisas novas em relação à Aula 10: o verbo mudou de `get` para `post`,
+apareceu o `json=payload`, e a resposta trouxe um identificador.
+
+```bash
+python aulas/aula11/aula11_post_usuario.py
+```
+
+```
+Status: 201
+Mensagem: Cadastro realizado com sucesso
+ID criado: mWKCOL0F867nQrfz
+```
+
+**Duzentos e um, e não duzentos.** 200 significa "entendi e respondi"; 201 significa "entendi,
+respondi, e passei a guardar algo novo". É por isso que o corpo trouxe um identificador: ele é o
+endereço do que acabou de nascer, e os três verbos seguintes precisam dele.
+
+O `administrador` vai como **texto** com aspas, `"true"` ou `"false"`, e não como o booleano do
+Python. É escolha desta API, e é o detalhe que mais derruba a primeira tentativa.
+
+### `aulas/aula11/aula11_status_nao_basta.py`
+
+O melhor argumento que existe contra validar só o status, e ele é real.
+
+```bash
+python aulas/aula11/aula11_status_nao_basta.py
+```
+
+```
+Status: 200
+Mensagem: Nenhum registro excluído
+```
+
+O servidor respondeu com **sucesso** para uma exclusão que não excluiu nada, e ele está sendo
+honesto: a mensagem diz exatamente isso. Um teste que só olhasse o número teria escrito "exclusão
+validada" no relatório sem que nada tivesse sido apagado.
+
+### `aulas/aula11/aula11_tres_quatrocentos.py`
+
+Três casos que o padrão HTTP descreveria com três números diferentes, e esta API responde 400 nos
+três.
+
+```bash
+python aulas/aula11/aula11_tres_quatrocentos.py
+```
+
+```
+e-mail repetido     -> 400 {'message': 'Este email já está sendo usado'}
+sem o campo email   -> 400 {'email': 'email é obrigatório'}
+usuário inexistente -> 400 {'message': 'Usuário não encontrado'}
+```
+
+O padrão chamaria o primeiro de **409, conflito**, o segundo de **422, conteúdo inválido**, e o
+terceiro de **404**. Isso não é bug dela: é a convenção dela. Nunca escreva
+`assert status == 422` porque o padrão diz que deveria ser 422: descubra o que a API responde e
+asserte isso.
+
+E repare que **os três corpos são diferentes**: dois trazem a chave `message` e o do meio traz a
+chave `email`. O status sozinho não distingue os casos nem quando o número é o mesmo.
+
+### `aulas/aula11/aula11_massa_unica.py`
+
+A solução do problema da abertura, e é o único arquivo da Aula 11 que não faz requisição nenhuma.
+
+```bash
+python aulas/aula11/aula11_massa_unica.py
+```
+
+```
+cadastro.1788982802@qa.com.br
+duplicado.1788982802@qa.com.br
+True
+```
+
+`int(time.time())` é a quantidade de segundos desde o começo de 1970, e nunca repete, porque o
+tempo não volta. A terceira linha é a armadilha: duas chamadas com o **mesmo prefixo**, no mesmo
+segundo, devolvem o mesmo e-mail, e é por isso que o prefixo é parâmetro.
+
+Biblioteca de geração de dados falsos é o outro caminho, útil quando a massa precisa parecer real.
+Ela **sorteia** de uma lista, e sorteio repete: se o seu teste depende de unicidade, some a marca
+de tempo mesmo usando a biblioteca.
+
+### `aulas/aula11/aula11_ciclo_completo.py`
+
+O ciclo inteiro, e ele tem **seis** passos, não quatro.
+
+```bash
+python aulas/aula11/aula11_ciclo_completo.py
+```
+
+```
+POST      -> 201 Cadastro realizado com sucesso
+GET       -> 200 nome=Gaia Silva
+PUT       -> 200 Registro alterado com sucesso
+GET       -> 200 nome=Gaia Silva Atualizada
+DELETE    -> 200 Registro excluído com sucesso
+GET final -> 400 Usuário não encontrado
+```
+
+Os dois que quase todo mundo esquece são o quarto e o sexto. O quarto não confia na mensagem
+"Registro alterado com sucesso": ele consulta de novo e confere o nome. O sexto é a validação do
+DELETE, porque excluir e receber 200 não prova que sumiu. **Mensagem de sucesso é o servidor
+dizendo que fez. O GET seguinte é você conferindo que ele fez.**
+
+O PUT manda o recurso **inteiro**, e não só o campo que mudou: os campos que você não mandar podem
+sumir.
+
+### `aulas/aula11/aula11_put_fantasma.py`
+
+Alterar um recurso que não existe faz o recurso passar a existir.
+
+```bash
+python aulas/aula11/aula11_put_fantasma.py
+```
+
+```
+Status: 201
+Corpo: {'message': 'Cadastro realizado com sucesso', '_id': 'U3YEG8YH1Uorig27'}
+Limpeza feita: o usuário criado sem querer foi apagado.
+```
+
+Isso é comportamento previsto no padrão HTTP, e várias APIs fazem. Quem escreve um teste negativo
+esperando recusa aqui vê o teste falhar, e não há defeito nenhum: o teste é que estava supondo a
+coisa errada.
+
+O identificador que voltou é **outro**, e não as dezesseis letras `b` que foram pedidas. Por isso a
+limpeza usa o `_id` da resposta: apagar pelo identificador pedido responderia 200 com "Nenhum
+registro excluído", e o usuário criado por engano ficaria lá.
+
+### `aulas/aula11/test_cadastro.py`
+
+A primeira demonstração da Aula 11: cadastrar, conferir e limpar. São dois testes.
+
+```bash
+cd aulas/aula11
+pytest test_cadastro.py::test_cadastro_de_usuario_com_sucesso -v
+pytest test_cadastro.py -v
+```
+
+```
+collected 2 items
+
+test_cadastro.py::test_cadastro_de_usuario_com_sucesso PASSED            [ 50%]
+test_cadastro.py::test_email_duplicado_e_rejeitado PASSED                [100%]
+
+============================== 2 passed in 3.13s ==============================
+```
+
+O primeiro valida na ordem canônica da Aula 10: status, existência do campo, valor do campo. A
+mensagem do primeiro `assert` carrega o status **e o corpo inteiro**, para o relatório dizer o que
+o servidor respondeu sem ninguém precisar rodar de novo com `print`.
+
+O segundo **passa quando recebe 400**. O resultado esperado dele é a rejeição, e se um dia ele
+falhar dizendo que veio 201, aí sim há defeito, e grave: a loja passou a aceitar dois clientes com
+o mesmo e-mail. A asserção dele é **dupla**, status e mensagem: esta API devolve 400 para meia dúzia
+de motivos diferentes, e validando só o número o teste continua verde no dia em que a recusa passar
+a ser por outro motivo.
+
+Os dois prefixos de e-mail são diferentes de propósito: eles rodam em sequência, dentro do mesmo
+segundo, e prefixo igual faria os dois colidirem.
+
+### `aulas/aula11/test_veredito.py`
+
+A segunda demonstração, e ela fecha a unidade de API.
+
+```bash
+cd aulas/aula11
+pytest test_veredito.py -v
+```
+
+```
+collected 2 items
+
+test_veredito.py::test_usuario_criado_passa_no_veredito PASSED           [ 50%]
+test_veredito.py::test_veredito_reprova_usuario_inexistente PASSED       [100%]
+
+============================== 2 passed in 2.51s ==============================
+```
+
+A função `validar_resposta_de_usuario` recebe um dado, aplica um monte de regras, junta os problemas
+numa lista e devolve um veredito. Lista vazia significa aprovado. **É exatamente o exercício da
+Aula 5**, o da lista de usuários com nome vazio, com o dado vindo de um servidor pela internet em
+vez de digitado à mão.
+
+Duas escolhas de projeto que vale ler no código. O `return` dentro do primeiro `if` é o **retorno
+antecipado** da Aula 6: status errado, para tudo, porque o corpo que voltou é uma mensagem de erro.
+No degrau dois **não** há `return`: ele acumula todos os campos ausentes em vez de parar no
+primeiro. Parar cedo serve para fluxo; acumular serve para contrato.
+
+E a linha da limpeza está **antes** do assert final, de propósito. Se o assert vem primeiro e falha,
+o programa para ali e o usuário nunca é apagado. **Apague antes de julgar, sempre.**
+
+### `aulas/aula11/aula11_login_token.py`
+
+Treino em casa, e ele fecha o desafio deixado no fim da Aula 10. O login devolve um token, e o
+token é a chave que endpoints protegidos exigem.
+
+```bash
+cd aulas/aula11
+pytest aula11_login_token.py -v
+```
+
+O 401 do segundo teste é o único caso da Aula 11 em que esta API não responde 400, e ele é honesto:
+senha errada é problema de autenticação, não de formato.
+
 ### `tests/test_setup.py`
 
 A verificação de ambiente do guia de setup, agora dentro do repositório. Da Aula 08 em diante o
@@ -3252,6 +3481,52 @@ O que esta suíte **não** confere, de propósito: se você seguiu a ordem canô
 (status, existência, valor) e se evitou validar dado específico de outra pessoa. Um teste pode
 passar hoje rodando contra dado que muda amanhã, e só a correção humana lê o código para achar
 essa diferença.
+
+### `tests/test_ciclo_aula11.py`
+
+A quarta suíte de autoverificação do curso. A da Aula 08 julgava o seu **código**, a da Aula 09 a
+sua **massa**, a da Aula 10 rodava os **seus testes** contra a API, e esta faz o mesmo e acrescenta
+uma cobrança que só existe na Aula 11: o seu arquivo precisa exercitar os **quatro verbos**.
+**Prazo da atividade: 22/09/2026, às 23h59.**
+
+A entrega é `entregas/test_ciclo_serverest.py`, com pelo menos três casos de teste: o ciclo completo
+com alteração num teste só, e dois cenários negativos.
+
+```bash
+pytest tests/test_ciclo_aula11.py -v
+```
+
+```
+collected 2 items
+
+tests/test_ciclo_aula11.py::test_a_entrega_tem_pelo_menos_tres_testes_e_todos_passam PASSED [ 50%]
+tests/test_ciclo_aula11.py::test_a_entrega_exercita_os_quatro_verbos PASSED [100%]
+
+============================== 2 passed in 4.90s ==============================
+```
+
+Ela cobra três coisas: pelo menos três casos coletados, todos passando contra a API real, e POST,
+GET, PUT e DELETE presentes no arquivo. O DELETE é o que fecha a parte três da atividade, a limpeza,
+e é o único item de forma que esta suíte julga.
+
+**Quem roda o seu arquivo é o pytest, num processo separado**, com o mesmo comando que você usaria
+na mão. É o que faz `parametrize`, `fixture` e classe de teste valerem aqui igual valem no terminal:
+nada que o curso ensinou é reprovado por causa da forma. Com `@pytest.mark.parametrize` cada linha
+da massa conta como um caso, porque é assim que o pytest conta.
+
+O que ela **não** confere: se você apagou tudo o que criou, se a asserção do nome novo é a do valor
+certo, e se o e-mail é único por execução. Isso é leitura humana, e é o que a correção olha.
+
+Enquanto a entrega não estiver no lugar, os dois testes pulam e a mensagem diz o que falta:
+
+```
+=========================== short test summary info ===========================
+SKIPPED [1] tests/test_ciclo_aula11.py: A entrega da Aula 11 ainda não está no lugar. Crie o arquivo 'entregas/test_ciclo_serverest.py' na raiz do repositório, com pelo menos três funções começando com 'test_'. Depois rode de novo.
+2 skipped in 0.01s
+```
+
+O pulo não é reprovação, e o comando termina com **exit code 0**: a IDE não confunde essa orientação
+com uma execução quebrada.
 
 ### `pytest.ini`
 
