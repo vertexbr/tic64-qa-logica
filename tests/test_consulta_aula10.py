@@ -89,7 +89,12 @@ def _ultimas_linhas(texto, quantas=25):
 
 def test_a_entrega_tem_pelo_menos_tres_testes_e_todos_passam():
     coleta = _pytest_na_entrega("--collect-only", "-q")
-    casos = re.findall(r"^\S+\.py::\S+$", coleta.stdout, re.M)
+    # O padrao NAO pode exigir \S+ depois do ::. Com @pytest.mark.parametrize e ids legiveis,
+    # que e o que a Aula 09 ensinou, o pytest imprime "arquivo.py::teste[CT-02 sem email]",
+    # com ESPACO dentro do identificador. Medido em 09/09/2026 na suite da Aula 11: a entrega
+    # parametrizada com tres casos era contada como UM, e a suite reprovava justamente quem
+    # seguiu a aula anterior. Corrigido aqui pelo mesmo motivo, antes de a Aula 10 ser dada.
+    casos = re.findall(r"^\S+\.py::.+$", coleta.stdout, re.M)
 
     if coleta.returncode != 0 and not casos:
         pytest.fail(
