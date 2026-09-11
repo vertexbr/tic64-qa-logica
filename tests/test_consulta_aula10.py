@@ -60,12 +60,10 @@ MINIMO_DE_CASOS = 3
 
 _ENTREGA = next((p for p in CAMINHOS if p.is_file()), None)
 
-if _ENTREGA is None:
-    pytest.skip(
-        "A entrega da Aula 10 ainda não está no lugar. Crie o arquivo "
-        "'entregas/test_consulta_serverest.py' na raiz do repositório, com pelo "
-        "menos três funções começando com 'test_'. Depois rode de novo.",
-        allow_module_level=True)
+_FALTA = (
+    "A entrega da Aula 10 ainda não está no lugar. Crie o arquivo "
+    "'entregas/test_consulta_serverest.py' na raiz do repositório, com pelo menos "
+    "três funções começando com 'test_'. Depois rode de novo.")
 
 
 def _pytest_na_entrega(*extra):
@@ -88,6 +86,12 @@ def _ultimas_linhas(texto, quantas=25):
 
 
 def test_a_entrega_tem_pelo_menos_tres_testes_e_todos_passam():
+    # O pulo acontece DENTRO do teste, e nao no modulo. Com pytest.skip de modulo o pytest
+    # coleta zero itens e sai com exit code 5, que a IDE e qualquer automacao leem como
+    # execucao quebrada. Assim ele coleta o item, pula, e sai com exit code 0.
+    if _ENTREGA is None:
+        pytest.skip(_FALTA)
+
     coleta = _pytest_na_entrega("--collect-only", "-q")
     # O padrao NAO pode exigir \S+ depois do ::. Com @pytest.mark.parametrize e ids legiveis,
     # que e o que a Aula 09 ensinou, o pytest imprime "arquivo.py::teste[CT-02 sem email]",
