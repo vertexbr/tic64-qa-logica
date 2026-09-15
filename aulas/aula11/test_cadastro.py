@@ -17,7 +17,7 @@
 #   com sucesso e a chave _id com o identificador. Cadastrar de novo com o mesmo e-mail
 #   responde 400, com a mensagem Este email já está sendo usado.
 
-import time
+from uuid import uuid4
 
 import requests
 
@@ -25,7 +25,7 @@ BASE_URL = "https://serverest.dev"
 
 
 def email_unico(prefixo):
-    return f"{prefixo}.{int(time.time())}@qa.com.br"
+    return f"{prefixo}.{uuid4().hex}@qa.com.br"
 
 
 def montar_payload(email):

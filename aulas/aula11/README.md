@@ -125,10 +125,11 @@ sem o campo email   -> 400 {'email': 'email é obrigatório'}
 usuário inexistente -> 400 {'message': 'Usuário não encontrado'}
 ```
 
-O padrão chamaria o primeiro de **409, conflito**, o segundo de **422, conteúdo inválido**, e o
-terceiro de **404**. Isso não é bug dela: é a convenção dela. Antes de escrever a asserção,
-descubra qual convenção a sua API usa, disparando a requisição e lendo o que voltou. Nunca escreva
-`assert status == 422` porque o padrão diz que deveria ser 422.
+Alguns contratos usam **409, conflito**, no primeiro caso, **422, conteúdo inválido**, no segundo,
+e **404** no terceiro. O ServeRest responde 400 nos três exemplos. Antes de escrever a asserção,
+consulte a documentação. Se ela prometer um status e a API responder outro, registre a divergência
+como defeito. Quando o caso não estiver documentado, observe a resposta e alinhe a regra com o
+time antes de fixar o resultado esperado.
 
 E repare que **os três corpos são diferentes**: dois trazem a chave `message` e o do meio traz a
 chave `email`. O status sozinho não distingue os casos nem quando o número é o mesmo.
@@ -142,23 +143,22 @@ python aulas/aula11/aula11_massa_unica.py
 ```
 
 ```
-cadastro.1788982802@qa.com.br
-duplicado.1788982802@qa.com.br
-True
+cadastro.9906519a925544d2a63328ead398709d@qa.com.br
+duplicado.da13f6f9a9c94fab98ef73fd268d64ca@qa.com.br
+False
 ```
 
-`int(time.time())` é a quantidade de segundos desde o começo de 1970, e nunca repete, porque o
-tempo não volta. O número muda a cada execução: rode duas vezes com um minuto de diferença e
-compare.
+`uuid4().hex` cria um identificador novo com 32 caracteres hexadecimais. A chance de colisão é
+desprezível para a massa de teste desta aula, mesmo quando duas execuções começam no mesmo segundo.
+Rode o arquivo duas vezes e compare os valores.
 
-A terceira linha é a armadilha. Duas chamadas com o **mesmo prefixo**, no mesmo segundo, devolvem
-o mesmo e-mail, e é por isso que o prefixo é parâmetro: prefixo diferente por teste resolve sem
-nada mais complicado.
+A terceira linha mostra que duas chamadas seguidas recebem identificadores diferentes. O prefixo
+continua útil para explicar a finalidade do dado, mas não é ele que garante a unicidade.
 
 Biblioteca de geração de dados falsos é o outro caminho, e ele é útil quando a massa precisa
 parecer real. Vem com um alerta que quase nenhum material dá: ela **sorteia** de uma lista, e
-sorteio repete. Se o seu teste depende de unicidade, some a marca de tempo mesmo usando a
-biblioteca.
+sorteio repete. Se o seu teste depende de unicidade, acrescente um UUID ao campo que precisa ser
+único, mesmo usando a biblioteca.
 
 ## `aula11_ciclo_completo.py`
 

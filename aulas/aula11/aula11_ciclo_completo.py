@@ -14,7 +14,7 @@
 #   novo; depois de excluir, ela responde 400 dizendo que o usuário não foi encontrado.
 #   O PUT substitui o recurso inteiro, então o corpo enviado leva todos os campos.
 
-import time
+from uuid import uuid4
 
 import requests
 
@@ -22,7 +22,7 @@ BASE_URL = "https://serverest.dev"
 
 payload = {
     "nome": "Gaia Silva",
-    "email": f"gaia.ciclo.{int(time.time())}@qa.com.br",
+    "email": f"gaia.ciclo.{uuid4().hex}@qa.com.br",
     "password": "JL1234!",
     "administrador": "true",
 }

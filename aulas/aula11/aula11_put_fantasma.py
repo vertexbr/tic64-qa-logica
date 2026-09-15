@@ -12,7 +12,7 @@
 #   e um identificador novo: o PUT criou o recurso. Recusa não é o comportamento previsto, e um
 #   teste negativo escrito contra este endpoint precisa esperar a criação.
 
-import time
+from uuid import uuid4
 
 import requests
 
@@ -20,7 +20,7 @@ BASE_URL = "https://serverest.dev"
 
 fantasma = {
     "nome": "Fantasma",
-    "email": f"fantasma.{int(time.time())}@qa.com.br",
+    "email": f"fantasma.{uuid4().hex}@qa.com.br",
     "password": "JL1234!",
     "administrador": "false",
 }
@@ -42,9 +42,9 @@ print("Limpeza feita: o usuário criado sem querer foi apagado.")
 # que aparece no slide 18 da apresentacao.
 #
 # 21 a 26  o dicionário fantasma
-#          Um payload completo, com e-mail único pela marca de tempo. Ele
-#          precisa ser único: se o e-mail já existisse, a recusa viria por
-#          outro motivo e a demonstração mostraria outra coisa.
+#          Um payload completo, com e-mail único por UUID. Ele precisa ser
+#          único: se o e-mail já existisse, a recusa viria por outro motivo e
+#          a demonstração mostraria outra coisa.
 #
 #      28  resposta = requests.put(f"{BASE_URL}/usuarios/bbbbbbbbbbbbbbbb",
 #          json=fantasma, timeout=10)

@@ -19,7 +19,7 @@
 #   administrador é o texto true ou o texto false, e status diferente de 200 encerra a
 #   verificação, porque não há corpo de usuário para conferir.
 
-import time
+from uuid import uuid4
 
 import requests
 
@@ -28,7 +28,7 @@ CAMPOS_OBRIGATORIOS = ["nome", "email", "password", "administrador", "_id"]
 
 
 def email_unico(prefixo):
-    return f"{prefixo}.{int(time.time())}@qa.com.br"
+    return f"{prefixo}.{uuid4().hex}@qa.com.br"
 
 
 def montar_payload(email):

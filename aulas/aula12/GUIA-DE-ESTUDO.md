@@ -12,7 +12,9 @@ Veja o [README.md](README.md) desta pasta para a explicação completa de cada a
 document.querySelectorAll("input").length
 ```
 
-Refine até dar exatamente um. Locator que casa mais de um elemento age no primeiro, e o primeiro raramente é o que você quer.
+Refine até dar exatamente um quando a ação precisa de um elemento. Se a intenção for trabalhar com
+uma coleção, conte os resultados e escolha `first`, `last` ou `nth` de propósito. Uma ação sobre um
+locator ambíguo para com `strict mode violation`; o Playwright não escolhe um elemento por você.
 
 **A ordem de preferência de locator, para guardar:**
 
@@ -23,7 +25,9 @@ Refine até dar exatamente um. Locator que casa mais de um elemento age no prime
 4. get_by_text          o texto solto na tela
 ```
 
-Papel primeiro porque é a única coisa que não está escrita no código da página: ela vem do padrão de acessibilidade e não muda quando alguém reorganiza o HTML.
+Papel e nome acessível vêm primeiro porque descrevem o que a pessoa reconhece na tela e resistem
+melhor a mudanças de layout. Use identificador ou atributo de teste quando a semântica não resolver,
+desde que o valor seja estável.
 
 ## `test_login_web.py`
 
@@ -71,4 +75,6 @@ def test_tres_comportamentos(page: Page):
 
 Dois testes seus, em `entregas/test_interacoes_web.py`, contra `/checkboxes` **ou** `/dropdown`, a sua escolha. A suíte de autoverificação está em `tests/test_interface_aula12.py`, na raiz do repositório, e ela roda os seus testes de verdade contra o navegador: não existe gabarito fixo para comparar, porque o produto desta atividade é o próprio teste.
 
-**Treino antes de escrever a entrega:** para cada locator que você for usar, abra o console da página escolhida, conte quantos elementos ele casa, e só depois cole no teste. Escreva o número num comentário na linha de cima: é o primeiro critério que a correção olha.
+**Treino antes de escrever a entrega:** para cada locator, abra o console da página escolhida e
+conte quantos elementos ele casa. Registre o número num comentário. Se a ação precisa de um elemento,
+refine até um. Se você quer uma coleção, deixe essa intenção visível com `first`, `last` ou `nth`.

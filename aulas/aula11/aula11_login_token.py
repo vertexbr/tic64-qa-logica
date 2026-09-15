@@ -17,7 +17,7 @@
 #   authorization trazendo um token que começa com "Bearer ". Autenticar com senha errada
 #   responde 401, com a mensagem "Email e/ou senha inválidos".
 
-import time
+from uuid import uuid4
 
 import requests
 
@@ -25,7 +25,7 @@ BASE_URL = "https://serverest.dev"
 
 
 def email_unico(prefixo):
-    return f"{prefixo}.{int(time.time())}@qa.com.br"
+    return f"{prefixo}.{uuid4().hex}@qa.com.br"
 
 
 def montar_payload(email):

@@ -2,12 +2,12 @@
 #
 # O padrão HTTP tem um número para cada um destes três casos: 409 para conflito com um estado
 # que já existe, 422 para conteúdo que desobedece a regra, e 404 para recurso que não está lá.
-# Esta API responde 400 nos três, e isso não é bug dela: é a convenção dela.
+# Esta API responde 400 nos três exemplos; isso só vira esperado quando coincide com o contrato.
 #
-# A consequência prática é a lição do arquivo. Antes de escrever a asserção, descubra qual
-# convenção a API usa, e o jeito de descobrir é disparar a requisição e ler o que voltou.
-# Nunca escreva assert status == 422 porque o padrão diz que deveria ser 422. E repare que os
-# três corpos são diferentes: dois trazem a chave message e um traz a chave email, então o
+# A consequência prática é a lição do arquivo. Consulte primeiro a documentação. Se ela prometer
+# um status e a API responder outro, registre a divergência como defeito. Quando o caso não estiver
+# documentado, observe a resposta e alinhe a regra com o time antes de fixar a asserção. Repare que
+# os três corpos são diferentes: dois trazem a chave message e um traz a chave email, então o
 # status sozinho não distingue os casos nem quando o número é o mesmo.
 #
 # REGRA DE NEGÓCIO (o que o slide projeta e o professor lê no início):
@@ -54,7 +54,8 @@ if id_criado:
 #          recusado.
 #
 #      30  duplicado = requests.post(...)
-#          O mesmo payload de novo. O padrão chamaria isto de 409, conflito.
+#          O mesmo payload de novo. Alguns contratos usam 409, conflito, neste
+#          caso.
 #
 #      31  print(f"e-mail repetido     -> ...")
 #          400, e o corpo traz a chave message.
@@ -63,15 +64,15 @@ if id_criado:
 #          Um dicionário com três chaves, sem a de e-mail.
 #
 #      34  faltando = requests.post(...)
-#          Campo obrigatório ausente. O padrão chamaria isto de 422, conteúdo
-#          inválido.
+#          Campo obrigatório ausente. Alguns contratos usam 422, conteúdo
+#          inválido, neste caso.
 #
 #      35  print(f"sem o campo email   -> ...")
 #          400, e o corpo traz a chave email, não message.
 #
 #      37  busca = requests.get(f"{BASE_URL}/usuarios/aaaaaaaaaaaaaaaa",
 #          timeout=10)
-#          Recurso que não está lá. O padrão chamaria isto de 404.
+#          Recurso que não está lá. Muitos contratos usam 404 neste caso.
 #
 #      38  print(f"usuário inexistente -> ...")
 #          400, e o corpo volta a trazer message.

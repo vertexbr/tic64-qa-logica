@@ -33,7 +33,7 @@ O QUE ESTA SUÍTE COBRA, E POR QUÊ
 - Todos os testes do seu arquivo rodam de verdade, num processo separado,
   contra o navegador real. Não existe massa fixa aqui para comparar: o teste
   que você escreveu é o produto sendo avaliado.
-- Pelo menos uma chamada de `expect` no arquivo. Teste sem validação é robô
+- Pelo menos uma chamada de `expect` em cada caso. Teste sem validação é robô
   de tarefa, e isso vale desde a primeira aula.
 
 O QUE ESTA SUÍTE NÃO COBRA, PORQUE É LEITURA HUMANA
@@ -44,6 +44,7 @@ O QUE ESTA SUÍTE NÃO COBRA, PORQUE É LEITURA HUMANA
 - Se o locator escolhido é o mais simples que identifica um único elemento,
   ou um que só funciona por sorte hoje.
 """
+import ast
 import pathlib
 import re
 import subprocess
@@ -125,11 +126,25 @@ def test_a_entrega_tem_pelo_menos_dois_testes_e_todos_passam():
             pytrace=False)
 
     fonte = _ENTREGA.read_text(encoding="utf-8")
-    if "expect(" not in fonte:
+    arvore = ast.parse(fonte, filename=str(_ENTREGA))
+    casos_sem_expect = []
+    for funcao in (n for n in ast.walk(arvore)
+                   if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))
+                   and n.name.startswith("test_")):
+        tem_expect = any(
+            isinstance(no, ast.Call)
+            and isinstance(no.func, ast.Name)
+            and no.func.id == "expect"
+            for no in ast.walk(funcao))
+        if not tem_expect:
+            casos_sem_expect.append(funcao.name)
+
+    if casos_sem_expect:
+        lista = ", ".join(casos_sem_expect)
         pytest.fail(
-            f"{_ENTREGA.name} passou, mas não encontrei nenhuma chamada de "
-            f"'expect(...)' no arquivo. Teste sem validação é robô de "
-            f"tarefa: acrescente pelo menos um expect por cenário.",
+            f"{_ENTREGA.name} passou, mas estes casos não têm chamada de "
+            f"'expect(...)': {lista}. Cada cenário precisa terminar com uma "
+            f"validação; acrescente pelo menos um expect em cada função.",
             pytrace=False)
 
     print(f"\n{len(casos)} caso(s) de teste em {_ENTREGA.name}, todos passaram:")

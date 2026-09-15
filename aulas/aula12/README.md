@@ -84,5 +84,5 @@ pytest tests/test_interface_aula12.py -v
 ```
 
 A suíte cobra três coisas: pelo menos dois casos de teste coletados, todos passando de verdade
-contra o navegador, e pelo menos uma chamada de `expect` no arquivo. Se ela não achar a sua
+contra o navegador, e pelo menos uma chamada de `expect` em cada caso. Se ela não achar a sua
 entrega, ela pula com o caminho exato na mensagem, e pulo não é reprovação.
