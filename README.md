@@ -3315,6 +3315,68 @@ pytest aula11_login_token.py -v
 O 401 do segundo teste é o único caso da Aula 11 em que esta API não responde 400, e ele é honesto:
 senha errada é problema de autenticação, não de formato.
 
+### `aulas/aula12/test_login_web.py`
+
+A primeira automação de interface do curso, contra `https://the-internet.herokuapp.com/login`.
+Três testes: login com sucesso, senha errada e usuário errado.
+
+```bash
+pytest aulas/aula12/test_login_web.py -v
+```
+
+```
+collected 3 items
+
+aulas/aula12/test_login_web.py::test_login_com_sucesso PASSED
+aulas/aula12/test_login_web.py::test_login_com_senha_errada PASSED
+aulas/aula12/test_login_web.py::test_login_com_usuario_errado PASSED
+
+============================== 3 passed in 10.18s ==============================
+```
+
+Os seis passos são os mesmos da lista que a turma escreveu na Aula 1, um a um: `goto` abre,
+`get_by_label` acha o campo pelo rótulo, `fill` digita, `get_by_role` acha o botão pelo papel,
+`click` envia, `expect` confere se entrou. `get_by_label` funciona aqui porque esta página tem
+rótulo de verdade nos dois campos, diferente do SauceDemo usado na explicação ao vivo.
+
+**O heading da área segura precisa de `exact=True`.** A página trouxe um segundo texto que também
+contém "Secure Area", o subtítulo de boas-vindas, e sem `exact=True` o locator por papel casa os
+dois elementos e a ferramenta recusa por ambiguidade. É o mesmo tipo de erro que o segundo bloco
+da aula ensina a ler: contar antes de confiar. Confirmado rodando contra o site real em 15/09/2026.
+
+O primeiro teste também valida o campo depois de preencher (`expect(...).to_have_value(...)`),
+antes de continuar para a senha: preencher não garante preenchido, e essa é a primeira verificação
+de estado do curso.
+
+Os dois cenários negativos usam `to_contain_text`, não igualdade exata, porque a mensagem da tela
+carrega espaço e quebra de linha ao redor do texto. Os dois passam porque o resultado esperado
+**é** a recusa: se um dia `test_login_com_senha_errada` falhar mostrando a área segura, aí sim há
+defeito, e grave.
+
+### `aulas/aula12/test_acoes.py`
+
+Três comportamentos de ação que confundem quem está começando, contra
+`https://the-internet.herokuapp.com/checkboxes`.
+
+```bash
+pytest aulas/aula12/test_acoes.py -v
+```
+
+```
+collected 1 item
+
+aulas/aula12/test_acoes.py::test_tres_comportamentos PASSED
+
+============================== 1 passed in 5.1s ==============================
+```
+
+`check()` é idempotente: chamado duas vezes na mesma caixa, ela continua marcada. `click()`
+alterna: a segunda caixa desta página já vem marcada, e um clique nela desmarca. Nenhum dos dois
+tem o mesmo efeito do outro, e confundir os dois é a causa mais comum de teste que funciona hoje e
+quebra quando o estado inicial da tela muda. O terceiro comportamento, que `fill` limpa o campo
+antes de escrever e digitar caractere por caractere não limpa, está descrito no guia da aula e não
+tem teste próprio aqui, porque a página de checkboxes não tem campo de texto.
+
 ### `tests/test_setup.py`
 
 A verificação de ambiente do guia de setup, agora dentro do repositório. Da Aula 08 em diante o
@@ -3527,6 +3589,42 @@ SKIPPED [1] tests/test_ciclo_aula11.py: A entrega da Aula 11 ainda não está no
 
 O pulo não é reprovação, e o comando termina com **exit code 0**: a IDE não confunde essa orientação
 com uma execução quebrada.
+
+### `tests/test_interface_aula12.py`
+
+A quinta suíte de autoverificação, e a primeira contra **interface**, não API. As anteriores
+comparavam código, massa e resposta de servidor; esta abre um navegador de verdade e só confirma
+que os seus testes passam contra a página e que a atividade tem o mínimo de cenários pedido.
+**Prazo da atividade: véspera da Aula 13.**
+
+A entrega é `entregas/test_interacoes_web.py`, com pelo menos dois casos de teste, um por ação
+pedida na página escolhida (`/checkboxes` ou `/dropdown`), e pelo menos um `expect` no arquivo.
+
+```bash
+pytest tests/test_interface_aula12.py -v
+```
+
+```
+collected 1 item
+
+tests/test_interface_aula12.py::test_a_entrega_tem_pelo_menos_dois_testes_e_todos_passam PASSED [100%]
+
+============================== 1 passed in 5.33s ==============================
+```
+
+Ela cobra três coisas: pelo menos dois casos coletados, todos passando de verdade contra o
+navegador, e pelo menos uma chamada de `expect` no arquivo, porque teste sem validação é robô de
+tarefa. O que ela **não** cobra, porque é leitura humana: se antes de cada locator existe o
+comentário com o número que o console deu, e se o locator escolhido é o mais simples que
+identifica um único elemento.
+
+Enquanto a entrega não estiver no lugar, o teste pula e a mensagem diz o que falta:
+
+```
+=========================== short test summary info ===========================
+SKIPPED [1] tests/test_interface_aula12.py: A entrega da Aula 12 ainda não está no lugar. Crie o arquivo 'entregas/test_interacoes_web.py' na raiz do repositório, com pelo menos duas funções começando com 'test_'. Depois rode de novo.
+1 skipped in 0.04s
+```
 
 ### `pytest.ini`
 
